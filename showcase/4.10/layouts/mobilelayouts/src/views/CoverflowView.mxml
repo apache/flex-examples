@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Coverflow" xmlns:ns="http://flex.apache.org/experimental/ns"
+		destructionPolicy="never" xmlns:components="components.*">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			protected function clickHandler(event:MouseEvent):void
+			{
+				navigator.pushView(NewView);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:actionContent>
+		<s:CalloutButton id="callOutButton" label="Settings" calloutDestructionPolicy="never" 
+						 horizontalPosition="end" verticalPosition="after">
+			<s:calloutLayout>
+				<s:VerticalLayout paddingTop="10" paddingBottom="10" paddingRight="10" paddingLeft="10"/>
+			</s:calloutLayout>
+			<s:calloutContent>
+				<s:VGroup fontWeight="bold" fontSize="12" alternatingItemColors="{new Array([0xf6f6f6,0xe5e5e5])}">
+					<s:VGroup>
+						<s:Label text="SelectedHoriontalDisplacement"/>
+						<s:HSlider id="SelectedHoriontalDisplacement" minimum="0" value="320" maximum="700" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="horizontalDisplacement"/>
+						<s:HSlider id="horizontalDisplacement" minimum="0" value="370" maximum="500" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="SelectedVerticalDisplacement"/>
+						<s:HSlider id="SelectedVerticalDisplacement" minimum="0" value="0" maximum="600" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="verticalDisplacement"/>
+						<s:HSlider id="verticalDisplacement" minimum="0" value="0" maximum="600" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="fieldOfView"/>
+						<s:HSlider id="fieldOfView" minimum="10" value="40" maximum="179" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="focalLength"/>
+						<s:HSlider id="focalLength" minimum="10" value="660" maximum="2000" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="duration"/>
+						<s:HSlider id="duration" minimum="0" value="250" maximum="2000" stepSize="10"/>
+					</s:VGroup>
+					<s:VGroup>
+						<s:Label text="maximumZ"/>
+						<s:HSlider id="maximumZ" minimum="0" value="50" maximum="5000" stepSize="10"/>
+					</s:VGroup>
+				</s:VGroup>
+			</s:calloutContent>
+		</s:CalloutButton>
+	</s:actionContent>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#000000" alpha="0.05"/>
+				<s:GradientEntry color="#000000" alpha="0.2"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	
+	<s:Scroller id="scroll" width="100%" height="100%" horizontalScrollPolicy="on" verticalScrollPolicy="off" pageScrollingEnabled="true"
+				touchInteractionStart="Indicator.touchInteractionStart(event)" touchInteractionEnd="Indicator.positionChanged(event)" skinClass="skins.PagedIndicatorScrollerSkin">
+		<s:Group id="group">
+			<s:layout>
+				<ns:CoverflowLayout id="coverFlowLayoutID" useScrollBarForNavigation="true" scrollBarDirection="horizontal"
+									selectedHorizontalDisplacement="{SelectedHoriontalDisplacement.value}" 
+									horizontalDisplacement="{horizontalDisplacement.value}" 
+									selectedVerticalDisplacement="{SelectedVerticalDisplacement.value}"
+									verticalDisplacement="{verticalDisplacement.value}" horizontalScrollPosition="4096"
+									fieldOfView="{fieldOfView.value}" focalLength="{focalLength.value}"
+									duration="{duration.value}" maximumZ="{maximumZ.value}"/>
+			</s:layout>
+			
+			<components:Img1 click="clickHandler(event)"/>
+			<components:Img2 click="clickHandler(event)"/>
+			<components:Img1 click="clickHandler(event)"/>
+			<components:Img2 click="clickHandler(event)"/>
+			<components:Img1 click="clickHandler(event)"/>
+			<components:Img2 click="clickHandler(event)"/>
+			<components:Img1 click="clickHandler(event)"/>
+			<components:Img2 click="clickHandler(event)"/>
+			<components:Img1 click="clickHandler(event)"/>
+			<components:Img2 click="clickHandler(event)"/>
+			
+		</s:Group>
+	</s:Scroller>
+	
+	<components:Indicator id="Indicator" horizontalCenter="0" bottom="40" direction="horizontal"/>
+	
+</s:View>

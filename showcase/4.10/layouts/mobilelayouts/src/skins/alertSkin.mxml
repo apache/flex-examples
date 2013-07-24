@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" maxWidth="350">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("spark.components.Alert")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="disabledWithControlBar" />
+		<s:State name="normalWithControlBar" />
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<!-- SkinParts
+	name=buttonGroup, type=spark.components.Group, required=false
+	name=contentGroup, type=spark.components.Group, required=false
+	name=iconGroup, type=spark.components.Group, required=false
+	name=messageDisplay, type=spark.components.supportClasses.TextBase, required=false
+	name=titleDisplay, type=spark.core.IDisplayText, required=false
+	name=controlBarGroup, type=spark.components.Group, required=false
+	-->
+	
+	<!-- Background & Stroke -->
+	<s:Rect width="100%" height="100%" top="0" left="0" right="0" bottom="0" radiusX="10">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#515151" alpha="0.9"/>
+				<s:GradientEntry color="#000101" alpha="0.9"/>
+			</s:LinearGradient>
+		</s:fill>
+		<s:stroke>
+			<s:LinearGradientStroke rotation="90">
+				<s:GradientEntry color="#bebebe"/>
+				<s:GradientEntry color="#000101" ratio="0.1"/>
+			</s:LinearGradientStroke>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%" top="0" left="0" right="0" bottom="0" gap="20"
+			  paddingBottom="20" paddingLeft="30" paddingRight="20" paddingTop="20">
+		<s:Label id="titleDisplay" fontWeight="bold" fontSize="15" maxDisplayedLines="1" color="#ffffff"/>
+		<s:Label id="messageDisplay" color="#ffffff" paddingLeft="5" paddingRight="5" width="100%"/>
+		<s:Group id="buttonGroup" width="100%">
+			<s:layout>
+				<s:HorizontalLayout gap="10" horizontalAlign="center"/>
+			</s:layout>
+		</s:Group>
+	</s:VGroup>
+	
+</s:Skin>

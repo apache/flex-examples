@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 
+		 width="{widthComp}"
+		 creationComplete="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.TouchInteractionEvent;
+			
+			private var indicatorSize:uint = 18;
+			private var _suspendPageIndicatorShortcut:Boolean;
+			[Bindable]private var widthComp:Number;
+			
+			public var direction:String;
+			
+			public function touchInteractionStart(event:TouchInteractionEvent):void
+			{
+				_suspendPageIndicatorShortcut = true;
+			}
+			
+			public function positionChanged(event:TouchInteractionEvent):void
+			{
+				init();
+				_suspendPageIndicatorShortcut = false;
+			}
+			
+			protected function init():void
+			{
+				var pos:Number;
+				var viewportSize:Number;
+				
+				if(direction == "horizontal")
+				{
+					pos = parentDocument.scroll.viewport.horizontalScrollPosition;
+					viewportSize = parentDocument.scroll.viewport.width;
+				}
+				else
+				{
+					pos = parentDocument.scroll.viewport.verticalScrollPosition;
+					viewportSize = parentDocument.scroll.viewport.height;
+				}
+				
+				var selectedIndex:int = Math.round(pos / viewportSize);
+				var numElements:int = parentDocument.group.numElements;
+				widthComp = numElements * 18;
+				
+				
+				var g:Graphics = pageIndicator.graphics;
+				g.clear();
+				
+				var axisPos:Number = 0;
+				var centerPos:Number = indicatorSize / 2;
+				var radius:Number = indicatorSize / 4;
+				
+				for (var i:uint = 0; i < numElements; i++)
+				{
+					if (i == selectedIndex)
+						g.beginFill(0x000000, .7);
+					else
+						g.beginFill(0.000000, .3);
+					
+					g.drawCircle(axisPos + centerPos, centerPos, radius); 
+					
+					g.endFill();
+					
+					axisPos += indicatorSize;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:SpriteVisualElement id="pageIndicator"/>
+	
+</s:Group>
