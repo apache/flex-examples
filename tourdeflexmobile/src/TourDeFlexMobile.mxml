@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+							xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" applicationComplete="init(event)">
+	
+	<fx:Style source="styles.css"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import AIRViews.AccelerometerView;
+			import AIRViews.SQLiteView;
+			
+			import LayoutViews.AccordionLayoutView;
+			import LayoutViews.CarouselLayoutView;
+			import LayoutViews.CoverFlowLayoutView;
+			import LayoutViews.HorizontalLayoutView;
+			import LayoutViews.RolodexLayoutView;
+			import LayoutViews.TileLayoutView;
+			import LayoutViews.TimeMachineLayoutView;
+			import LayoutViews.VerticalLayoutView;
+			
+			import UIViews.ButtonBarView;
+			import UIViews.CalloutButtonView;
+			import UIViews.CheckboxView;
+			import UIViews.DateSpinnerView;
+			import UIViews.ListView;
+			import UIViews.MobileGridView;
+			import UIViews.RadiobuttonView;
+			import UIViews.SpinnerListView;
+			import UIViews.TextInputView;
+			import UIViews.ToggleSwitchView;
+			
+			import views.HttpServiceView;
+			
+			private var isOpen:Boolean;	
+			
+			[Bindable]
+			private var currentStageWidth:Number;
+		
+			[Bindable]
+			private var currentStageHeight:Number;
+			
+			protected function init(event:FlexEvent):void
+			{
+				stage.addEventListener(Event.RESIZE, orientationHandler);
+				
+				currentStageWidth = stage.stageWidth*-1;
+				lateralMenu.x = currentStageWidth;
+				currentStageHeight = navigator.height-45;
+				lateralMenu.height = currentStageHeight;			
+				lateralMenu.x = currentStageWidth;
+				isOpen = false;
+			}
+			
+			private function orientationHandler(event:Event):void{
+				currentStageWidth = stage.stageWidth*-1;
+				
+				if(isOpen == false){
+					lateralMenu.x = currentStageWidth;
+				}
+				
+				currentStageHeight = navigator.height-45;
+				lateralMenu.height = currentStageHeight;	
+				
+				trace(lateralMenu.height);
+			}
+			
+			protected function menuHandler(event:MouseEvent):void
+			{
+				
+				if(isOpen == true){
+					moveOut.play();
+					isOpen = false;
+				} else if(isOpen == false){
+					moveIn.play();
+					isOpen = true;
+				}
+			}
+			
+			protected function changeHandler(event:IndexChangeEvent):void
+			{
+				isOpen = false;
+				moveOut.play();
+				
+				navigator.pushView(componentsList.selectedItem.view);
+			}
+			
+			protected function menuBackgroundHandler(event:MouseEvent):void
+			{
+				isOpen = false;
+				moveOut.play();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:Move id="moveIn" duration="200" target="{lateralMenu}" xTo="0"/>
+		<s:Move id="moveOut" duration="200" target="{lateralMenu}" xTo="{currentStageWidth}"/>
+	</fx:Declarations>
+	
+	<s:ViewNavigator id="navigator" firstView="views.BlogView" width="100%" height="100%">
+		<s:navigationContent>
+			<s:Button icon="@Embed('assets/images/logo.png')" height="35" width="77" label="Menu" click="menuHandler(event)"/>
+		</s:navigationContent>
+	</s:ViewNavigator>
+	
+	<s:Group id="lateralMenu" width="100%" y="45">
+		<s:Graphic width="100%" height="100%" click="menuBackgroundHandler(event)">
+			<s:BitmapImage width="100%" height="100%" scaleMode="zoom" source="@Embed('assets/images/bg.png')"/>
+		</s:Graphic>
+		
+		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="200" height="100%" change="changeHandler(event)" contentBackgroundColor="#000000">
+			<s:ArrayList>
+				<fx:Object label="UI Components" type="separator"/>			
+				<fx:Object label="ButtonBar" type="view" view="{ButtonBarView}"/>
+				<fx:Object label="CalloutButton" type="view" view="{CalloutButtonView}"/>
+				<fx:Object label="CheckBox" type="view" view="{CheckboxView}"/>
+				<fx:Object label="DateSpinner" type="view" view="{DateSpinnerView}"/>
+				<fx:Object label="List" type="view" view="{ListView}"/>
+				<fx:Object label="MobileGrid" type="view" view="{MobileGridView}"/>
+				<fx:Object label="RadioButton" type="view" view="{RadiobuttonView}"/>
+				<fx:Object label="SpinnerList" type="view" view="{SpinnerListView}"/>
+				<fx:Object label="TextInput" type="view" view="{TextInputView}"/>
+				<fx:Object label="ToggleSwitch" type="view" view="{ToggleSwitchView}"/>
+				
+				<fx:Object label="Layouts" type="separator"/>				
+				<fx:Object label="HorizontalLayout" type="view" view="{HorizontalLayoutView}"/>
+				<fx:Object label="VerticalLayout" type="view" view="{VerticalLayoutView}"/>
+				<fx:Object label="TileLayout" type="view" view="{TileLayoutView}"/>
+				<fx:Object label="CoverFlowLayout" type="view" view="{CoverFlowLayoutView}"/>
+				<fx:Object label="TimeMachineLayout" type="view" view="{TimeMachineLayoutView}"/>
+				<fx:Object label="RolodexLayout" type="view" view="{RolodexLayoutView}"/>
+				<fx:Object label="CarouselLayout" type="view" view="{CarouselLayoutView}"/>
+				<fx:Object label="AccordionLayout" type="view" view="{AccordionLayoutView}"/>
+				<!-- <fx:Object label="StackLayout" type="view" view="{StackLayoutView}"/> -->
+				
+				<fx:Object label="AIR APIs" type="separator"/>				
+				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
+				<fx:Object label="Accelerometer" type="view" view="{AccelerometerView}"/>
+				
+				<fx:Object label="Data Access" type="separator"/>			
+				<fx:Object label="HTTPService" type="view" view="{HttpServiceView}"/>
+			</s:ArrayList>
+		</s:List>
+	</s:Group>
+	
+	
+</s:Application>
