@@ -78,7 +78,6 @@ limitations under the License.
 			protected function init(event:FlexEvent):void
 			{
 				btn.addEventListener(MouseEvent.CLICK, slideButtonHandler);
-				//btn.addEventListener(UIButton.CLICKED, slideButtonHandler);
 				_slideTimer.addEventListener(TimerEvent.TIMER, doSlide);		
 				_slideTimer.addEventListener(TimerEvent.TIMER_COMPLETE, slideComplete); 
 				
@@ -96,8 +95,6 @@ limitations under the License.
 					_slideTimer.repeatCount = Math.max(Math.floor(STEPS * (1 - navigators.x / lateralMenu.width)), 1);					
 					_slideTimer.reset();				
 					_slideTimer.start();	
-					//moveIn.play();
-					//moveOut.play();
 				}					
 				else 
 				{	
@@ -119,32 +116,10 @@ limitations under the License.
 					navigators.x = 0;				
 				}			
 			} 
-			
-			
-			
-			/*		protected function menuHandler(event:MouseEvent):void
-			{
-			if(isOpen == true)
-			{
-			moveOut.play();
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);	
-			//navigators.mouseEnabled = navigators.mouseChildren = false;		
-			navigators.includeInLayout = false;
-			isOpen = false;
-			} 
-			else if(isOpen == false)
-			{
-			moveIn.play();
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 
-			//navigators.mouseEnabled = navigators.mouseChildren = true;	
-			isOpen = true;
-			}
-			}*/
+
 			
 			protected function changeHandler(event:IndexChangeEvent):void
 			{
-				//isOpen = false;
-				//moveIn.play();
 				close();
 				stage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 
 				navigator.pushView(componentsList.selectedItem.view);
@@ -232,9 +207,6 @@ limitations under the License.
 	
 	
 	<s:Group id="lateralMenu" width="225" y="0" height="100%">
-		<!--s:Graphic width="100%" height="100%" click="menuBackgroundHandler(event)">
-		<s:BitmapImage width="100%" height="100%" scaleMode="zoom" source="@Embed('assets/images/bg.png')"/>
-		</s:Graphic-->
 		
 		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="225" height="100%" 
 				change="changeHandler(event)" contentBackgroundColor="#000000">
@@ -260,7 +232,6 @@ limitations under the License.
 				<fx:Object label="RolodexLayout" type="view" view="{RolodexLayoutView}"/>
 				<fx:Object label="CarouselLayout" type="view" view="{CarouselLayoutView}"/>
 				<fx:Object label="AccordionLayout" type="view" view="{AccordionLayoutView}"/>
-				<!-- <fx:Object label="StackLayout" type="view" view="{StackLayoutView}"/> -->
 				
 				<fx:Object label="AIR APIs" type="separator"/>				
 				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
