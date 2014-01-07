@@ -74,16 +74,20 @@ limitations under the License.
 			protected var _slideTimer:Timer = new Timer(SLIDE_INTERVAL, STEPS);
 			public static const CLICKED:String = "slideOutClicked";
 			protected var _buttonEnabled:Boolean = true;
+			protected var _startX:Number;
+			
 			
 			protected function init(event:FlexEvent):void
 			{
 				btn.addEventListener(MouseEvent.CLICK, slideButtonHandler);
 				_slideTimer.addEventListener(TimerEvent.TIMER, doSlide);		
-				_slideTimer.addEventListener(TimerEvent.TIMER_COMPLETE, slideComplete); 
-				
+				_slideTimer.addEventListener(TimerEvent.TIMER_COMPLETE, slideComplete); 				
 			}
 			
-			
+/*******************************************
+	*used some code from Macomponents UISlideOutNavigation, replaced the actionscript elements with flex UI elements and was able to apply
+	*the same drag to close behavior
+*********************************************/  
 			
 			public function open(animated:Boolean = true):void 
 			{				
@@ -112,12 +116,12 @@ limitations under the License.
 					_slideTimer.reset();					
 					_slideTimer.start();					
 				}				
-				else {					
+				else 
+				{					
 					navigators.x = 0;				
 				}			
 			} 
-
-			
+		
 			protected function changeHandler(event:IndexChangeEvent):void
 			{
 				close();
@@ -125,13 +129,7 @@ limitations under the License.
 				navigator.pushView(componentsList.selectedItem.view);
 			}
 			
-			protected function menuBackgroundHandler(event:MouseEvent):void
-			{
-				isOpen = false;
-				moveOut.play();
-			}
 			
-			protected var _startX:Number;
 			
 			protected function slideButtonHandler(event:Event):void 
 			{				
@@ -145,8 +143,7 @@ limitations under the License.
 				}
 				
 			}
-			
-			
+						
 			protected function mouseDown(event:MouseEvent):void 
 			{			
 				if (!navigators.mouseEnabled && mouseX > lateralMenu.width && mouseY > 45) 
@@ -155,16 +152,13 @@ limitations under the License.
 					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);					
 					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);			
 				}		
-			} 
-			
+			} 			
 			
 			protected function doSlide(event:TimerEvent):void 
-			{
-				
+			{				
 				var slideTimer:Timer = Timer(event.currentTarget);				
 				var t:Number = slideTimer.currentCount/slideTimer.repeatCount;			
-				navigators.x = (navigators.mouseEnabled ? (1-t) : t) * lateralMenu.width;
-				
+				navigators.x = (navigators.mouseEnabled ? (1-t) : t) * lateralMenu.width;				
 			} 
 			
 			protected function slideComplete(event:TimerEvent):void 
@@ -183,8 +177,7 @@ limitations under the License.
 			} 
 			
 			protected function mouseUp(event:MouseEvent):void 
-			{
-				
+			{		
 				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
 				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);				
 				navigators.mouseEnabled = navigators.mouseChildren = mouseX < lateralMenu.width / 2;			
@@ -193,9 +186,7 @@ limitations under the License.
 				_slideTimer.start();
 				
 			}
-			
-			
-			
+					
 		]]>
 	</fx:Script>
 	
