@@ -196,8 +196,7 @@ limitations under the License.
 	
 	
 	
-	<s:Group id="lateralMenu" width="225" y="0" height="100%">
-		
+	<s:Group id="lateralMenu" width="225" y="0" height="100%">	
 		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="225" height="100%" 
 				change="changeHandler(event)" contentBackgroundColor="#000000">
 			<s:ArrayList>
