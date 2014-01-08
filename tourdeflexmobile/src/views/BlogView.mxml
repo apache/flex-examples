@@ -18,7 +18,9 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="Apache Flex Blog" viewActivate="init(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="Apache Flex Blog" 
+		viewActivate="init(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.rpc.events.ResultEvent;
@@ -33,6 +35,7 @@ limitations under the License.
 			
 			protected function resultHandler(event:ResultEvent):void
 			{
+				busyInc.visible= false;
 				for(var i:uint = 0; i<=event.result.channel.item.length()-1; i++){
 					StyleableTextField(textArea.textDisplay).htmlText += "<b>" + event.result.channel.item[i].title + "</b>" + "\n" + "<i>" + event.result.channel.item[i].pubDate + "</i>" + "\n\n" + event.result.channel.item[i].description + "\n\n";
 				}
@@ -48,5 +51,5 @@ limitations under the License.
 	</fx:Declarations>
 	
 	<s:TextArea id="textArea" selectable="false" editable="false" skinClass="spark.skins.mobile.TextAreaSkin" left="5" right="5" top="5" bottom="5"/>
-	
+	<s:BusyIndicator id="busyInc" width="40" height="40" horizontalCenter="0" verticalCenter="0" symbolColor="0xFFFFFF"/>
 </s:View>
