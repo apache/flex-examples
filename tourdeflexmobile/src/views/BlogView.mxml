@@ -19,7 +19,8 @@ limitations under the License.
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		title="Apache Flex Blog" viewActivate="init(event)">
+		title="Apache Flex Blog" 
+		viewActivate="init(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.rpc.events.ResultEvent;
