@@ -191,8 +191,7 @@ limitations under the License.
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:Move id="moveIn" duration="200" target="{navigators}" xTo="0"/>
-		<s:Move id="moveOut" duration="200" target="{navigators}" xTo="200"/>
+
 	</fx:Declarations>
 	
 	
