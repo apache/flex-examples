@@ -150,8 +150,8 @@ limitations under the License.
 				if (navigators.mouseEnabled && mouseX < 20)
 				{
 					_startX = mouseX;	
-					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp1);	
-					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove1);
+					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpOpen);	
+					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveOpen);
 				}
 			} 			
 			
@@ -190,13 +190,13 @@ limitations under the License.
 				
 			}
 			
-			protected function mouseMove1(event:MouseEvent):void 
+			protected function mouseMoveOpen(event:MouseEvent):void 
 			{				
 				navigators.mouseEnabled = navigators.mouseChildren = false;		
 				navigators.x = Math.max(Math.min(mouseX + _startX, lateralMenu.width), 0);				
 			} 
 			
-			protected function mouseUp1(event:MouseEvent):void 
+			protected function mouseUpOpen(event:MouseEvent):void 
 			{		
 				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp1);
 				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove1);						
