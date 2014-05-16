@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="SQLite" viewActivate="init(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.ViewNavigatorEvent;
+			import spark.skins.mobile.TextAreaSkin;
+			
+			public var conn:SQLConnection;
+			public var db:File;
+			private var myStatement:SQLStatement;
+			private var myQuery:String;
+			
+			protected function init(event:ViewNavigatorEvent):void
+			{
+				db = File.applicationStorageDirectory.resolvePath("flex.db");
+				conn = new SQLConnection();
+				conn.addEventListener(SQLEvent.OPEN, openDatabaseHandler);
+				conn.openAsync(db);
+			}
+			
+			private function loadEntries():void{
+				myStatement = new SQLStatement();
+				myStatement.sqlConnection = conn;
+				myStatement.addEventListener(SQLEvent.RESULT, openDatabaseResult);				
+				var myQuery:String = "SELECT * FROM items";				
+				myStatement.text = myQuery;
+				myStatement.execute();
+			}
+			
+			private function openDatabaseHandler(event:SQLEvent):void{
+				myStatement = new SQLStatement();
+				myStatement.sqlConnection = conn;
+				myStatement.addEventListener(SQLEvent.RESULT, loadDatabaseResult);				
+				myQuery = "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, itemText TEXT)";
+				myStatement.text = myQuery;
+				myStatement.execute();
+			}
+			
+			private function loadDatabaseResult(event:SQLEvent):void{
+				loadEntries();
+			}
+			
+			private function openDatabaseResult(event:SQLEvent):void{
+				var itemsArray:Array = new Array();
+				
+				var result:SQLResult = myStatement.getResult();
+				
+				if(result.data != null){
+					for(var i:int = 0; i<result.data.length; i++){
+						itemsArray.push({label:unescape(result.data[i].itemText)});					
+					}
+				}
+							
+				itemsCollection = new ArrayCollection(itemsArray);
+				itemsList.dataProvider = itemsCollection;
+			}
+			
+			private function modifyDatabaseResult(event:SQLEvent):void{
+				loadEntries();
+			}
+			
+			protected function addItemHandler():void
+			{
+				if(textInput.text != ""){
+					var myStatement:SQLStatement = new SQLStatement();
+					myStatement.sqlConnection = conn;
+					myStatement.addEventListener(SQLEvent.RESULT, modifyDatabaseResult);
+					
+					var myQuery:String = "INSERT INTO items (itemText) VALUES ('"+textInput.text+"')";
+					
+					myStatement.text = myQuery;
+					myStatement.execute();
+					
+					textInput.text = "";
+				}
+			}
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState"){
+					currentState = "InfoState";				
+				}else if(currentState == "InfoState"){
+					currentState = "DemoState";
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:ArrayCollection id="itemsCollection"/>
+	</fx:Declarations>
+	
+	<s:TextInput id="textInput" includeIn="DemoState" enter="addItemHandler()" skinClass="spark.skins.mobile.TextInputSkin" y="10" left="5" right="60" height="40"/>
+	<s:Button label="Add" y="10" includeIn="DemoState" width="50" height="40" right="5" click="addItemHandler()"/>
+	
+	<s:List id="itemsList" includeIn="DemoState" width="100%" bottom="0" top="60"/>
+	
+	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="A SQLConnection instance is used to manage the creation of and connection to local SQL database files (local databases).
+				&#xd; &#xd;The functionality of the SQLConnection class falls into several categories:
+				
+				&#xd; &#xd;A local SQL database file is created or opened by calling the open() method or the SQLConnection instance to the SQLStatement's sqlConnection property.
+				
+				&#xd; &#xd;The SQLConnection class also provides state for SQL statements, including a mechanism for executing multiple statements in a transaction. Transactions are managed using the begin(), commit(), and rollback() methods. In addition, the setSavepoint(), releaseSavepoint(), and rollbackToSavepoint() methods allow code to define and manage savepoints. These are used to subdivide transactions into sets of operations.
+				
+				&#xd; &#xd;The SQLConnection class provides access to database schema information for connected databases. A database's schema describes the definitions of its tables, columns, indices, and triggers. See the loadSchema() method for more information.
+				
+				&#xd; &#xd;The SQLConnection class provides the ability to encrypt databases using AES with CCM. This provides both authentication and privacy for data. To encrypt a database, a 16 byte key (specified using a ByteArray) must be specified when the database is created. This key can later be changed using the SQLConnection.reencrypt() method. Encryption imposes a performance penalty on writes to and reads from the database. Encryption is applied to data stored on the disk, but not to a temporary data cache in memory. Encryption is not supported for in-memory databases.
+				
+				&#xd; &#xd;A SQLConnection instance can be used to receive database-level event notifications and provide configuration control for all aspects of a database, including cache page size, process canceling, and statement execution options.
+				
+				&#xd; &#xd;A SQLConnection instance operates in one of two distinct execution modes: asynchronous and synchronous. To use synchronous execution, you use the open() method to connect to the main database for the SQLConnection instance. To use asynchronous execution, use the openAsync() method to connect to the main database for the instance.
+				
+				&#xd; &#xd;When you're using asynchronous execution, you use event listeners or a Responder instance to determine when an operation completes or fails. The operations run in the background rather than in the main application thread, so the application continues to run and respond to user interaction even while the database operations are being performed. Each asynchronous SQLConnection instance executes SQL statements in its own thread.
+				
+				&#xd; &#xd;In asynchronous execution mode, you begin a specific operation by calling the appropriate method, and you can detect the completion (or failure) of the operation by registering a listener for the appropriate event. Each operation has an associated event that is dispatched when the operation completes successfully; for example, when an openAsync() method call completes successfully (when the database connection is opened) the open event is dispatched. When any operation fails, an error event is dispatched. The SQLError instance in the SQLErrorEvent object's error property contains information about the specific error, including the operation that was being attempted and the reason the operation failed.
+				
+				&#xd; &#xd;When you're using synchronous execution, you do not need to register event listeners to determine when an operation completes or fails. To identify errors, enclose the error-throwing statements in a try..catch block. Because synchronous operations execute in the main execution thread, all application functionality (including refreshing the screen and allowing mouse and keyboard interaction) is paused while the database operation or operations are performed. For long-running operations this can cause a noticeable pause in the application.."/>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>

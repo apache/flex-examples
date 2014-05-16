@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="TextInput">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.skins.mobile.TextAreaSkin;
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState"){
+					currentState = "InfoState";				
+				}else if(currentState == "InfoState"){
+					currentState = "DemoState";
+				}
+			}
+			
+			private function submitText():void
+			{
+				label.text = textInput.text;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+	</fx:Declarations>
+	
+	<s:TextInput includeIn="DemoState" id="textInput" skinClass="spark.skins.mobile.TextInputSkin" prompt="Type Here and Tap Enter" left="5" right="5" top="5" height="40" enter="submitText()" />
+	
+	<s:Label includeIn="DemoState" id="label" horizontalCenter="0" y="60" textAlign="center"/>
+	
+	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="TextInput is a text-entry control that lets users enter and edit a single line of uniformly-formatted text.
+				&#xd; &#xd;The TextInput skin for the Spark theme uses the RichEditableText class. This means that the Spark TextInput control supports the Text Layout Framework (TLF) library, which builds on the Flash Text Engine (FTE). In combination, these layers provide text editing with high-quality international typography and layout.
+				
+				&#xd; &#xd;The TextInput skin for the mobile theme uses the StyleableStageText class instead of RichEditableText. Since StyleableStageText uses native text fields it allows for better text entry and manipulation experiences on mobile devices however there are limitations and differences that you should consider. The native text controls used by StageText apply different paddings around text. In order to avoid vertical scrolling, the StageText-based TextInput skin attempts to estimate this padding and compensate for that. Because of this and other differences in how native text controls treat text, the default height of the TextInput control using StageText-based skin will differ from its default height using the the TextField-based TextInput skin.
+				
+				&#xd; &#xd;You can set the text to be displayed, or get the text that the user has entered, using the text property. This property is a String, so if the user enter a numeric value it will be reported, for example, as 123.45 rather than 123.45.
+				
+				&#xd; &#xd;The text is formatted using CSS styles such as fontFamily and fontSize.
+				
+				&#xd; &#xd;For the Spark theme you can specify the width of the control using the widthInChars property which provides a convenient way to specify the width in a way that scales with the font size or you can use the typicalText property. Note that if you use typicalText, the widthInChars property is ignored. For all themes, you can also specify an explicit width in pixels, a percent width, or use constraints such as left and right. You do not normally do anything to specify the height; the control's default height is sufficient to display one line of text.
+				
+				&#xd; &#xd;You can use the maxChars property to limit the number of character that the user can enter, and the restrict to limit which characters the user can enter. To use this control for password input, set the displayAsPassword property to true.
+				
+				&#xd; &#xd;For the mobile theme, the soft-keyboard-specific properties, autoCapitalize, autoCorrect, returnKeyLabel and softKeyboardType properties specify keyboard hints. If a soft-keyboard is present but does not support a feature represented by the hint, the hint is ignored. In mobile environments with only hardware keyboards, these hints are ignored.
+				
+				&#xd; &#xd;This control dispatches a FlexEvent.ENTER event when the user pressed the Enter key rather than inserting a line break, because this control does not support entering multiple lines of text. By default, this control has explicit line breaks.
+				
+				&#xd; &#xd;	This control is a skinnable control whose default skin contains either a RichEditableText instance for the Spark theme or a StyleableStageText instance for the Mobile theme. It handles displaying and editing the text. (The skin also handles drawing the border and background.) This RichEditableText or StyleableStageText instance can be accessed as the textDisplay object. For the mobile theme, if you wish to use the TextField-based skin, rather than the StageText-based skin, set the skinClass property to spark.skins.mobile.TextInputSkin.
+																																																																																																																																			 
+				&#xd; &#xd; For the Spark theme, as a result of its RichEditableText using TLF, the Spark TextInput control supports displaying left-to-right (LTR) text, such as French, right-to-left (RTL) text, such as Arabic, and bidirectional text such as a French phrase inside of an Arabic one. If the predominant text direction is right-to-left, set the direction style to rtl. The textAlign style defaults to start, which makes the text left-aligned when direction is ltr and right-aligned when direction is rtl. To get the opposite alignment, set textAlign to end.
+																																																																																																																																			 
+				&#xd; &#xd; Also as a result of using TLF, the Spark TextInput supports unlimited undo/redo within one editing session. An editing session starts when the control gets keyboard focus and ends when the control loses focus.
+																																																																																																																																			 
+				&#xd; &#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>

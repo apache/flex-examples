@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="DateSpinnerView">
+	<fx:Script>
+		<![CDATA[
+			import spark.skins.mobile.TextAreaSkin;
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState"){
+					currentState = "InfoState";				
+				}else if(currentState == "InfoState"){
+					currentState = "DemoState";
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+	</fx:Declarations>
+	
+	<s:DateSpinner includeIn="DemoState" displayMode="dateAndTime" verticalCenter="0" horizontalCenter="0"/>
+	
+	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The DateSpinner control presents an interface for picking a particular date or time.
+				&#xd;&#xd;The DateSpinner control can display the date, the time, or the date and time, based on the value of the displayMode property.
+				
+				&#xd;&#xd;The UI for the control is made up of a series of SpinnerList controls wrapped inside a SpinnerListContainer that show the currently-selected date. Through touch or mouse interaction, users can adjust the selected date.
+				
+				&#xd;&#xd;The DateSpinnerSkin only defines some sizing properties. To change the appearance of the DateSpinner control, you typically reskin the underlying SpinnerListSkin or SpinnerListContainerSkin."/>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>
