@@ -18,7 +18,7 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="HorizontalLayout">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="StackLayout" xmlns:ns="http://flex.apache.org/experimental/ns">
 	
 	<fx:Script>
 		<![CDATA[
@@ -33,7 +33,7 @@ limitations under the License.
 				bitmapImage.source = "assets/images/box"+random+".png";
 				group.addElement(bitmapImage);
 				
-				group.horizontalScrollPosition = group.contentWidth;
+				group.verticalScrollPosition = group.contentHeight;
 			}
 		]]>
 	</fx:Script>
@@ -42,7 +42,7 @@ limitations under the License.
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)">
 			<s:icon>
-				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/add.png')" source240dpi="@Embed('assets/icons/240/add.png')" source320dpi="@Embed('assets/icons/320/add.png')" />
+				<s:MultiDPIBitmapSource source160dpi="@Embed('/assets/icons/160/add.png')" source240dpi="@Embed('/assets/icons/240/add.png')" source320dpi="@Embed('/assets/icons/320/add.png')" />
 			</s:icon>
 		</s:Button>
 	</s:actionContent>
@@ -50,7 +50,7 @@ limitations under the License.
 	<s:Scroller id="scroller" width="100%" height="100%">
 		<s:Group id="group">
 			<s:layout>
-				<s:HorizontalLayout verticalAlign="middle" useVirtualLayout="true" />
+				<ns:StackLayout verticalAlign="middle" useVirtualLayout="true" />
 			</s:layout>
 		</s:Group>
 	</s:Scroller>

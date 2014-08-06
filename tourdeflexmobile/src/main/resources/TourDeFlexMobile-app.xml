@@ -64,7 +64,7 @@ limitations under the License.
 	<initialWindow>
 		<!-- The main SWF or HTML file of the application. Required. -->
 		<!-- Note: In Flash Builder, the SWF reference is set automatically. -->
-		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
+		<content>${output}</content>
 		
 		<!-- The title of the main window. Optional. -->
 		<!-- <title></title> -->
@@ -300,7 +300,7 @@ limitations under the License.
 			
 		]]></manifestAdditions>
     </android>
-    <iPhone>
+    <!--iPhone>
         <InfoAdditions><![CDATA[
 			<key>UIDeviceFamily</key>
 			<array>
@@ -309,5 +309,5 @@ limitations under the License.
 			</array>
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
-    </iPhone>
+    </iPhone-->
 </application>

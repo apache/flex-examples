@@ -48,5 +48,5 @@ limitations under the License.
 	</fx:Declarations>
 	
 	<s:TextArea id="textArea" selectable="false" editable="false" skinClass="spark.skins.mobile.TextAreaSkin" left="5" right="5" top="5" bottom="5"/>
-	
+
 </s:View>

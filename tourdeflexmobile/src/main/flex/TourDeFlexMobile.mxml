@@ -123,13 +123,13 @@ limitations under the License.
 	
 	<s:ViewNavigator id="navigator" firstView="views.BlogView" width="100%" height="100%">
 		<s:navigationContent>
-			<s:Button icon="@Embed('assets/images/logo.png')" height="35" width="77" label="Menu" click="menuHandler(event)"/>
+			<s:Button icon="@Embed('/assets/images/logo.png')" height="35" width="77" label="Menu" click="menuHandler(event)"/>
 		</s:navigationContent>
 	</s:ViewNavigator>
 	
 	<s:Group id="lateralMenu" width="100%" y="45">
 		<s:Graphic width="100%" height="100%" click="menuBackgroundHandler(event)">
-			<s:BitmapImage width="100%" height="100%" scaleMode="zoom" source="@Embed('assets/images/bg.png')"/>
+			<s:BitmapImage width="100%" height="100%" scaleMode="zoom" source="@Embed('/assets/images/bg.png')"/>
 		</s:Graphic>
 		
 		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="200" height="100%" change="changeHandler(event)" contentBackgroundColor="#000000">

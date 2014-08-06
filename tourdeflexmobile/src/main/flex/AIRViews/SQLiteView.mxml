@@ -22,12 +22,15 @@ limitations under the License.
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.events.FlexEvent;
-			
+        import flash.data.SQLConnection;
+        import flash.data.SQLResult;
+        import flash.data.SQLStatement;
+        import flash.filesystem.File;
+
+        import mx.collections.ArrayCollection;
+
 			import spark.events.ViewNavigatorEvent;
-			import spark.skins.mobile.TextAreaSkin;
-			
+
 			public var conn:SQLConnection;
 			public var db:File;
 			private var myStatement:SQLStatement;
@@ -116,8 +119,8 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('/assets/icons/160/about.png')" source240dpi="@Embed('/assets/icons/240/about.png')" source320dpi="@Embed('/assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('/assets/icons/160/dock.png')" source240dpi="@Embed('/assets/icons/240/dock.png')" source320dpi="@Embed('/assets/icons/320/dock.png')"/>
 		<s:ArrayCollection id="itemsCollection"/>
 	</fx:Declarations>
 	

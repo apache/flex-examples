@@ -22,14 +22,10 @@ limitations under the License.
 	
 	<fx:Script>
 		<![CDATA[
-			import flash.display.Sprite;
-			import flash.events.AccelerometerEvent;
-			import flash.events.Event;
 			import flash.sensors.Accelerometer;
 			
 			import spark.events.ViewNavigatorEvent;
-			import spark.skins.mobile.TextAreaSkin;		
-			
+
 			private var ball:Sprite;
 			private var accelerometer:Accelerometer;        
 			private var xSpeed:Number = 0;
@@ -136,8 +132,8 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('/assets/icons/160/about.png')" source240dpi="@Embed('/assets/icons/240/about.png')" source320dpi="@Embed('/assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('/assets/icons/160/dock.png')" source240dpi="@Embed('/assets/icons/240/dock.png')" source320dpi="@Embed('/assets/icons/320/dock.png')"/>
 	</fx:Declarations>
 
 	<s:SpriteVisualElement id="container" includeIn="DemoState"/>

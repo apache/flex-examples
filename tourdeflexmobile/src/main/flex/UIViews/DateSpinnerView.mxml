@@ -40,8 +40,8 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('/assets/icons/160/about.png')" source240dpi="@Embed('/assets/icons/240/about.png')" source320dpi="@Embed('/assets/icons/320/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('/assets/icons/160/dock.png')" source240dpi="@Embed('/assets/icons/240/dock.png')" source320dpi="@Embed('/assets/icons/320/dock.png')"/>
 	</fx:Declarations>
 	
 	<s:DateSpinner includeIn="DemoState" displayMode="dateAndTime" verticalCenter="0" horizontalCenter="0"/>
