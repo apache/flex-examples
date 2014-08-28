@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<!--
+This component is primarily static and is only meant to show what other
+pages of the store could look like.
+
+Note that this page was put together in the Design view so you'll see more
+hard coded locations and sizes.
+
+Also note when working with a Canvas that using the constraint styles 
+(e.g., left, top, right, bottom) can provide better layout predictability than 
+using x and y, especially when percentage widths and heights are used.
+
+Width and height are hard-coded in the root tag to help the Design view.
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:s="library://ns.adobe.com/flex/spark"
+           xmlns="*" width="990" height="550">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+
+			public function updateMapImage():void
+			{
+				mapImage.source = mapCanvas.getStyle('dottedMap');
+			}
+		]]>
+	</fx:Script>
+	<s:HGroup width="100%" height="100%" y="0" x="0" styleName="colorPanel">
+	
+		<s:VGroup width="230" height="100%">
+			<s:Group width="100%" height="100%">
+			
+				<s:BorderContainer left="10" top="10" width="100%" height="60" backgroundColor="#ebebe9" styleName="homeSection">
+					<s:Label left="10" top="10" text="Search Developers" height="22" styleName="sectionHeader"/>
+					<s:Button left="168" top="30" label="Go" width="47" height="20" styleName="glass" click="Alert.show('This feature is not implemented in this sample', 'Go')"/>
+					<s:TextInput left="10" top="30" height="20" width="150"/>
+				</s:BorderContainer>
+				
+				<s:BorderContainer left="10" top="78" width="100%" height="280" backgroundColor="#ffffff" styleName="homeSection">
+					<s:VGroup left="10" top="10" width="100%" height="100%" gap="0">
+						<s:Label text="Flex Experts That Can Help You" styleName="sectionHeader"/>
+						<s:Line height="5" width="197"/>
+						<s:Label text="General" styleName="homeProgramHeader"/>
+						<s:Label text="BlazeDS Experts" fontSize="9"/>
+						<s:Spacer height="8" width="100%"/>
+						<s:Label text="Server-side" styleName="homeProgramHeader"/>
+						<s:Label text="Java, PHP Developers" fontSize="9"/>
+						<s:Spacer height="8" width="100%"/>
+						<s:Label text="Mobile" styleName="homeProgramHeader"/>
+						<s:Label text="Android, IOS and more" fontSize="9"/>
+						<s:Spacer height="8" width="100%"/>
+						<s:Label text="Students" styleName="homeProgramHeader"/>
+						<s:Label text="Free Assistance" fontSize="9"/>
+						<s:Spacer height="8" width="100%"/>
+					</s:VGroup>
+				</s:BorderContainer>
+				
+				<s:BorderContainer left="10" top="366" width="100%" height="174" styleName="homeSection" backgroundColor="#ebebe9">
+					<s:VGroup left="10" top="10" width="100%" height="100%" gap="0">
+					
+						<s:Label text="Manage My Account" styleName="sectionHeader"/>
+						
+						<s:Label text="Phone Number"/>
+						
+						<s:HGroup width="100%" height="25" horizontalAlign="left" verticalAlign="middle">
+							<s:TextInput height="20" width="40"/>
+							<s:Line width="8" height="25"/>
+							<s:TextInput height="20" width="40"/>
+							<s:Line width="8" height="25"/>
+							<s:TextInput height="20" width="40"/>
+						</s:HGroup>
+						
+						<s:Label text="Password"/>
+						<s:TextInput height="20"/>
+						<s:Spacer height="8" width="100%"/>
+						
+						<s:CheckBox label="Remember my phone number" selected="true"/>
+						<s:Spacer height="8" width="100%"/>
+						
+						<s:Button label="Login" styleName="glass" height="20" width="55" click="Alert.show('This feature is not implemented in this sample', 'Login')"/>
+						
+					</s:VGroup>
+				</s:BorderContainer>
+				
+			</s:Group>
+			
+		</s:VGroup>
+		
+		<s:VGroup width="750" height="100%">
+			<s:Group width="100%" height="100%">
+			
+			    <!-- can't use binding to set the mapImage source because the style isn't available early enough -->
+				<s:Group id="mapCanvas" width="100%" height="35%" styleName="homeMap" right="10" top="10">
+					<s:Image id="mapImage" width="487" height="100%" alpha="1.0" left="10" top="10"/>
+					<s:Label y="110" text="US Developers . Flex . FlexJS" width="95%" height="40" horizontalCenter="0" fontWeight="bold" fontSize="22" color="#ffffff" fontFamily="Arial" textAlign="center"/>
+					<s:Label text="Learn More &gt;&gt;" width="95" bottom="10" right="10" fontSize="12" fontFamily="Arial"/>
+					<s:Label text="$60/hr" fontSize="20" right="10" top="10" color="#ffffff" fontWeight="bold" fontFamily="Arial"/>
+					<s:Label text="Rates as low as" x="551" top="16" fontSize="12"/>
+				</s:Group>
+				
+				<s:BorderContainer width="100%" height="330" backgroundColor="#ffffff" borderStyle="solid" cornerRadius="4" bottom="10" right="10">
+					
+					<s:Label left="10" top="10" text="Featured Developers" width="173" height="25" styleName="sectionHeader"/>
+					
+					<s:HGroup left="0" top="43" width="100%" height="100%">
+						
+						<s:VGroup width="33%" height="100%">
+							
+							<s:Group width="100%">
+								<s:Image source="@Embed('/assets/akotter.jpg')" horizontalCenter="0" verticalCenter="0"/>
+							</s:Group>
+							
+							<s:Group width="100%">
+								<s:Label text="Annette Kotter" horizontalCenter="0" id="feat_prod_1" fontWeight="bold" fontSize="12"/>
+							</s:Group>
+							
+						</s:VGroup>
+						
+						<s:VGroup width="33%" height="100%">
+							
+							<s:Group width="100%">
+								<s:Image horizontalCenter="0" verticalCenter="0" source="@Embed('/assets/bcrater.jpg')"/>
+							</s:Group>
+							
+							<s:Group width="100%">
+								<s:Label text="Ben Crater" horizontalCenter="0" id="feat_prod_2" fontWeight="bold" fontSize="12"/>
+							</s:Group>
+							
+						</s:VGroup>
+						
+						<s:VGroup width="33%" height="100%">
+							
+							<s:Group width="100%">
+								<s:Image horizontalCenter="0" verticalCenter="0" source="@Embed('/assets/jproctor.jpg')"/>
+							</s:Group>
+							
+							<s:Group width="100%">
+								<s:Label text="Jane Proctor" horizontalCenter="0" id="feat_prod_3" fontWeight="bold" fontSize="12"/>
+							</s:Group>
+							
+						</s:VGroup>
+						
+					</s:HGroup>
+					
+				</s:BorderContainer>
+				
+			</s:Group>
+		
+		</s:VGroup>
+		
+	</s:HGroup>
+	
+</s:Group>

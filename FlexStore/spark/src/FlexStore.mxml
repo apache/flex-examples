@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark" 
+               xmlns="*"
+				minWidth="990" minHeight="550"
+				preinitialize="loadStyle()"
+				creationComplete="startService()"
+                stateChangeComplete="chainStatesIfNeeded()"
+				pageTitle="FlexStore">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.IViewCursor;
+			import mx.collections.ArrayCollection;
+			import samples.flexstore.Product;
+			import mx.rpc.events.ResultEvent;
+			import mx.events.StyleEvent;
+			import mx.styles.StyleManager;
+            import mx.managers.LayoutManager;
+			
+			[Bindable]
+			private var catalog:ArrayCollection;
+			
+			private var currentTheme:String = "beige";
+			
+			private function toggleTheme():void
+			{
+				if (currentTheme == "beige")
+				{
+					currentTheme = "blue";
+				}
+				else
+				{
+					currentTheme = "beige";
+				}
+				
+				loadStyle();
+			}
+			
+			private function startService():void
+			{
+				productService.send();
+			}
+			
+			private function loadStyle():void
+			{
+				var eventDispatcher:IEventDispatcher =
+					styleManager.loadStyleDeclarations(currentTheme + ".swf");
+				eventDispatcher.addEventListener(StyleEvent.COMPLETE, completeHandler);
+			}
+			
+			private function completeHandler(event:StyleEvent):void
+			{
+				image.source = acb.getStyle("storeLogo");
+				homeView.updateMapImage();
+				super.initialized = true;
+                callLater(prebake);
+			}
+			
+			private function productServiceResultHandler(event:ResultEvent):void
+			{
+				//HTTPService returns an ArrayCollection for nested arrays
+				var products:ArrayCollection = event.result.catalog.product;
+				var temp:ArrayCollection = new ArrayCollection();
+				var cursor:IViewCursor = products.createCursor();
+				while (!cursor.afterLast)
+				{
+					var product:Product = new Product();
+					product.fill(cursor.current);
+					temp.addItem(product);
+					cursor.moveNext();
+				}
+				catalog = temp;
+			}
+			
+			override public function set initialized(value:Boolean):void
+			{
+				// Hold off until the Runtime CSS SWF is done loading.
+			}
+            
+            private var stateChain:Array;
+            
+            private function headHome():void
+            {
+                homeButton.selected = true;
+                if (currentState == "ProductsState")
+                {
+                    productsButton.selected = false;
+                    stateChain = ["ProductsWipeUp", "HomeWipeDown", "HomeState"];
+                    currentState = "ProductsWipeUp";
+                }
+                else if (currentState == "SupportState")
+                {
+                    supportButton.selected = false;
+                    stateChain = ["SupportWipeUp", "HomeWipeDown", "HomeState"];
+                    currentState = "SupportWipeUp";                    
+                }
+            }
+            
+            private function headToProducts():void
+            {
+                productsButton.selected = true;
+                if (currentState == "SupportState")
+                {
+                    supportButton.selected = false;
+                    stateChain = ["SupportWipeUp", "ProductsWipeDown", "ProductsState"];
+                    currentState = "SupportWipeUp";                    
+                }
+                if (currentState == "HomeState")
+                {
+                    homeButton.selected = false;
+                    stateChain = ["HomeWipeUp", "ProductsWipeDown", "ProductsState"];
+                    currentState = "HomeWipeUp";                    
+                }
+            }
+            
+            private function headToSupport():void
+            {
+                supportButton.selected = true;
+                if (currentState == "ProductsState")
+                {
+                    productsButton.selected = false;
+                    stateChain = ["ProductsWipeUp", "SupportWipeDown", "SupportState"];
+                    currentState = "ProductsWipeUp";                    
+                }
+                if (currentState == "HomeState")
+                {
+                    homeButton.selected = false;
+                    stateChain = ["HomeWipeUp", "SupportWipeDown", "SupportState"];
+                    currentState = "HomeWipeUp";                    
+                }
+            }
+            
+            private function prebake():void
+            {
+                if (LayoutManager.getInstance().isInvalid())
+                {
+                    callLater(prebake);
+                    return;
+                }
+                addEventListener("enterFrame", prebake2);
+            }
+            
+            private function prebake2(event:Event):void
+            {
+                removeEventListener("enterFrame", prebake2);
+                trace("prebake2");
+                stateChain = ["ProductsPreBake", "HomeState"];
+                currentState = "ProductsPreBake";
+            }
+                
+            private function chainStatesIfNeeded():void
+            {
+                if (LayoutManager.getInstance().isInvalid())
+                {
+                    callLater(chainStatesIfNeeded);
+                    return;
+                }
+                if (stateChain != null)
+                {
+                    if (currentState == stateChain[0])
+                    {
+                        addEventListener("enterFrame", nextState);
+                    }
+                }
+            }
+            
+            private function nextState(event:Event):void
+            {
+                removeEventListener("enterFrame", nextState);
+                stateChain.shift();
+                if (stateChain.length)
+                    currentState = stateChain[0];
+                else
+                    stateChain == null;
+            }
+		]]>
+	</fx:Script>
+	
+	<fx:Style source="main.css"/>
+	
+    <fx:Declarations>
+        <s:HTTPService id="productService" url="data/catalog.xml"
+                       result="productServiceResultHandler(event)"/>        
+    </fx:Declarations>
+	
+    <s:controlBarContent>
+        <s:HGroup id="acb" width="100%" styleName="storeControlBar">
+            <s:Image id="image" 
+                     click="toggleTheme()"
+                     toolTip="Change Theme"/>
+            <s:ToggleButton id="homeButton"
+                            label="Home"
+                            height="100%"
+                            selected="true"
+                            styleName="storeButtonBar"
+                            click="headHome()" />
+            <s:ToggleButton id="productsButton"
+                            label="Products"
+                            height="100%"
+                            styleName="storeButtonBar"
+                            click="headToProducts()"/>
+            <s:ToggleButton id="supportButton"
+                            label="Support"
+                            height="100%"
+                            styleName="storeButtonBar"
+                            click="headToSupport()"/>            
+        </s:HGroup>
+    </s:controlBarContent>
+    
+    <s:states>
+        <s:State name="HomeState" stateGroups="['Home']" />
+        <s:State name="HomeWipeUp" stateGroups="['Home']" />
+        <s:State name="HomeWipeDown" stateGroups="['Home']" />
+        <s:State name="ProductsPreBake" stateGroups="['Home', 'Products']" />
+        <s:State name="ProductsState" stateGroups="['Products']" />
+        <s:State name="ProductsWipeUp" stateGroups="['Products']" />
+        <s:State name="ProductsWipeDown" stateGroups="['Products']" />
+        <s:State name="SupportState" stateGroups="['Support']" />
+        <s:State name="SupportWipeUp" stateGroups="['Support']" />
+        <s:State name="SupportWipeDown" stateGroups="['Support']" />
+    </s:states>
+    
+    <s:transitions>
+        <s:Transition fromState="HomeState" toState="HomeWipeUp">
+            <s:Wipe direction="up" target="{homeView}" />
+        </s:Transition>
+        <s:Transition fromState="HomeWipeDown" toState="HomeState">
+            <s:Wipe direction="down" target="{homeView}" />
+        </s:Transition>
+        <s:Transition fromState="ProductsState" toState="ProductsWipeUp">
+            <s:Wipe direction="up" target="{pView}" />
+        </s:Transition>
+        <s:Transition fromState="ProductsWipeDown" toState="ProductsState">
+            <s:Wipe direction="down" target="{pView}" />
+        </s:Transition>
+        <s:Transition fromState="SupportState" toState="SupportWipeUp">
+            <s:Wipe direction="up" target="{supportView}" />
+        </s:Transition>
+        <s:Transition fromState="SupportWipeDown" toState="SupportState">
+            <s:Wipe direction="down" target="{supportView}" />
+        </s:Transition>
+    </s:transitions>
+	<s:VGroup width="990" paddingLeft="0" paddingRight="0" horizontalCenter="0" top="12">
+				
+			<HomeView id="homeView" width="100%" height="550" includeIn="Home"
+                      visible.HomeWipeUp="false"
+                      visible.HomeWipeDown="false"
+					  />
+			<ProductsView id="pView" includeIn="Products" visible.ProductsPreBake="false"
+                          visible.ProductsWipeUp="false"
+                          visible.ProductsWipeDown="false"
+                          width="100%" height="550" creationComplete="pView.catalog = catalog"
+						  />
+			<SupportView id="supportView" includeIn="Support"
+                         visible.SupportWipeUp="false"
+                         visible.SupportWipeDown="false"
+                         width="100%" height="550"
+						 />
+	</s:VGroup>
+	
+</s:Application>

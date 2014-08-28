@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<!--
+This component is primarily static and is only meant to show what other
+pages of the store could look like.
+
+Note that this page was put together in the Design view so you'll see more
+hard coded locations and sizes.
+
+We did not have sizing issues here as much so you'll see more hardcoded 
+"y" values rather than "top."
+
+The width and height are hard-coded in the root tag to help the Design view.
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:s="library://ns.adobe.com/flex/spark" xmlns="*" alpha="1.0"
+    width="990" height="550">
+	
+	<fx:Script>
+	    <![CDATA[
+	       import mx.controls.Alert; 
+	    ]]>
+	</fx:Script>
+	
+    <fx:Declarations>
+        <fx:XML id="locationsModel">
+            <root>
+                <location image="assets/support_mapmarker_a.png" name="601 Townsend St" /> 
+                <location image="assets/support_mapmarker_b.png" name="Location B" />
+                <location image="assets/support_mapmarker_c.png" name="Location C" />	   	   
+            </root> 
+        </fx:XML>   
+        
+        <s:ArrayCollection id="locations" source="{locationsModel.root.location}"/>        
+    </fx:Declarations>
+	
+	<s:HGroup x="0" y="0" width="100%" height="100%" styleName="colorPanel">
+	
+		<s:VGroup width="32%" height="100%">
+			<s:Group width="100%" height="60%">
+			
+				<s:Label y="10" text="Check Location" styleName="sectionHeader" x="20"/>
+				
+				<s:Form width="95%" height="150" y="64" horizontalCenter="0">
+					<s:layout>
+                        <s:VerticalLayout gap="8" paddingBottom="0" paddingRight="0" paddingTop="5"  />
+                    </s:layout>
+					<s:FormItem label="Address:" width="100%">
+						<s:TextInput id="address" width="90%"/>
+					</s:FormItem>
+					
+					<s:FormItem label="City:" width="100%">
+						<s:TextInput id="city" width="60%"/>						
+					</s:FormItem>
+					
+					<s:FormItem label="State:" width="100%">
+						<s:ComboBox id="state" width="50%">
+							<s:dataProvider>
+                                <s:ArrayList>
+                                    <fx:Array>
+                                        <fx:String>California</fx:String>
+                                        <fx:String>Nevada</fx:String>
+                                        <fx:String>Oregon</fx:String>
+                                        <fx:String>Washington</fx:String>
+                                    </fx:Array>                                    
+                                </s:ArrayList>
+            				</s:dataProvider>
+						</s:ComboBox>
+					</s:FormItem>
+					
+					<s:FormItem label="ZIP Code:" width="100%">
+						<s:TextInput id="zip" width="30%"/>
+					</s:FormItem>
+					
+				</s:Form>
+				
+				<s:Label y="38" text="Option1: Enter Address" horizontalCenter="0" styleName="instructions"/>
+				
+				<s:Button y="297" label="Locate" click="Alert.show('This feature is not implemented in this sample', 'Locate')" horizontalCenter="0"/>
+				
+				<s:HGroup y="327" width="80%" height="20" horizontalAlign="center" verticalAlign="middle" horizontalCenter="0">
+					<s:Line width="60">
+                        <s:stroke>
+                            <s:SolidColorStroke color="#000000"/>
+                        </s:stroke>
+                    </s:Line>
+					<s:Label text="OR"/>
+                    <s:Line width="60">
+                        <s:stroke>
+                            <s:SolidColorStroke color="#000000"/>
+                        </s:stroke>
+                    </s:Line>
+				</s:HGroup>
+				
+				<s:Label y="355" text="Option 2: Drag this marker into the map" horizontalCenter="0" styleName="instructions"/>
+				
+				<s:Image y="380" horizontalCenter="0" source="@Embed('/assets/support_mapmarker_plus.png')"/>
+				
+				<s:Line y="415" horizontalCenter="0" width="200" alpha="0.6"/>
+				
+			</s:Group>
+			
+			<s:Group width="100%" height="40%">
+				<s:VGroup width="80%" height="90%" horizontalCenter="0" top="0">
+					<s:Label text="Location" styleName="instructions"/>
+					<s:DataGroup width="100%" dataProvider="{locations}">
+                        <s:itemRenderer>
+                            <fx:Component>
+                                <s:ItemRenderer styleName="listItem" width="100%">
+                                    <s:Image width="21" height="25" source="{data.image}" />
+                                    <s:Label width="100%" text="{data.name}" />
+                                </s:ItemRenderer>                                                            
+                            </fx:Component>
+                        </s:itemRenderer>
+					</s:DataGroup>
+				</s:VGroup>
+			</s:Group>
+			
+		</s:VGroup>
+		
+		<s:Group width="68%" height="100%">
+			<s:Image source="@Embed('/assets/support_map.png')" fillMode="scale" left="2" right="2" top="2" bottom="2"/>
+		</s:Group>
+		
+	</s:HGroup>
+	
+</s:Group>

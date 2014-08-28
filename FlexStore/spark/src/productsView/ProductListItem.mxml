@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+         xmlns:s="library://ns.adobe.com/flex/spark" 
+    styleName="listItem" 
+    height="{ProductListItem.HEIGHT}"
+    automationName="{product.name}">
+
+    <fx:Metadata>
+       [Event(name="productQtyChange", type="samples.flexstore.ProductListEvent")]
+       [Event(name="removeProduct", type="samples.flexstore.ProductListEvent")]
+    </fx:Metadata>
+    
+    <fx:Script>
+    <![CDATA[
+    
+        import samples.flexstore.Product;
+        import samples.flexstore.ProductListEvent;
+        
+        public static const HEIGHT:int = 30;
+        
+        [Bindable]
+        public var product:Product;
+        
+        private function qtyChange():void
+    	{
+            product.qty = int(qty.text);
+            var event:ProductListEvent = new ProductListEvent(ProductListEvent.PRODUCT_QTY_CHANGE);
+            event.product = product;
+    		dispatchEvent(event);
+        }
+        
+        private function removeItem():void
+        {
+            var event:ProductListEvent = new ProductListEvent(ProductListEvent.REMOVE_PRODUCT);
+            event.product = product;
+    		dispatchEvent(event);
+        }
+        
+    ]]>
+    </fx:Script>
+    
+    <fx:Declarations>
+        <s:CurrencyFormatter currencySymbol="$" id="cf" fractionalDigits="2"/>
+    </fx:Declarations>
+    
+    <s:layout>
+        <s:HorizontalLayout />
+    </s:layout>
+        
+    <s:Button id="removeButton"
+        width="14" height="14" 
+        icon="@Embed('/assets/trashcan.png')"
+        toolTip="Remove from cart"
+        click="removeItem()"/>
+
+    <s:Image id="productImage" width="12" height="24" source="{product.image}"/>
+
+    <s:Label id="productName" maxWidth="100" text="{product.name}"/>
+
+    <s:Spacer width="100%" />
+
+    <s:Label id="productPrice" 
+        text="{cf.format(product.price)}" textAlign="right"/>
+        
+    <s:TextInput id="qty" width="25" text="{product.qty}" includeIn="showQuantity"
+                  textAlign="right" maxChars="3" change="qtyChange()" />
+    <s:states>
+        <s:State name="compare" />
+        <s:State name="showQuantity" />
+    </s:states>
+    
+</s:ItemRenderer>

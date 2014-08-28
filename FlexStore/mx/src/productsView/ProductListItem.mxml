@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+    styleName="listItem"
+    height="{ProductListItem.HEIGHT}"
+    automationName="{product.name}">
+
+    <mx:Metadata>
+       [Event(name="productQtyChange", type="samples.flexstore.ProductListEvent")]
+       [Event(name="removeProduct", type="samples.flexstore.ProductListEvent")]
+    </mx:Metadata>
+    
+    <mx:Script>
+    <![CDATA[
+    
+        import samples.flexstore.Product;
+        import samples.flexstore.ProductListEvent;
+        
+        public static const HEIGHT:int = 30;
+        
+        [Bindable]
+        public var product:Product;
+        
+        private function qtyChange():void
+    	{
+            product.qty = int(qty.text);
+            var event:ProductListEvent = new ProductListEvent(ProductListEvent.PRODUCT_QTY_CHANGE);
+            event.product = product;
+    		dispatchEvent(event);
+        }
+        
+        private function removeItem():void
+        {
+            var event:ProductListEvent = new ProductListEvent(ProductListEvent.REMOVE_PRODUCT);
+            event.product = product;
+    		dispatchEvent(event);
+        }
+        
+    ]]>
+    </mx:Script>
+    
+    <mx:CurrencyFormatter currencySymbol="$" id="cf" precision="2"/>
+    
+    <mx:Button id="removeButton"
+        width="14" height="14" 
+        icon="@Embed('/assets/trashcan.png')"
+        toolTip="Remove from cart"
+        click="removeItem()"/>
+
+    <mx:Image id="productImage" width="12" height="24" source="{product.image}"/>
+
+    <mx:Label id="productName" maxWidth="100" text="{product.name}"/>
+
+    <mx:Spacer width="100%" />
+
+    <mx:Label id="productPrice" 
+        text="{cf.format(product.price)}" textAlign="right"/>
+        
+    <mx:states>
+        <mx:State name="showQuantity">
+            <mx:AddChild>
+                <mx:TextInput id="qty" width="25" text="{product.qty}" 
+                    textAlign="right" maxChars="3" change="qtyChange()" />
+           </mx:AddChild>
+       </mx:State>        
+    </mx:states>
+    
+</mx:HBox>
