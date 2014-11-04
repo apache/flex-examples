@@ -71,7 +71,7 @@ limitations under the License.
 	<s:List id="list" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"
 			pageScrollingEnabled="true" includeIn="DemoState">
 		<s:layout>
-			<ns:StackLayout horizontalAlign="justify" verticalAlign="justify" scrollBarDirection="horizontal"/>
+			<ns:StackLayout scrollBarDirection="horizontal" horizontalAlign="center" verticalAlign="middle"/>
 		</s:layout>
 		<s:dataProvider>
 			<s:ArrayList>
