@@ -20,13 +20,14 @@ limitations under the License.
 
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   applicationDPI="160" 
-			   applicationComplete="init(event)">
-	
-	<fx:Style source="styles.css"/>
-	
+			   applicationDPI="160" frameRate="60"
+			   applicationComplete="init(event)"
+			   splashScreenImage="@Embed('assets/images/poweredby.png')" 
+			   splashScreenScaleMode="letterbox">
+	<fx:Style source="styles.css"/>	
 	<fx:Script>
 		<![CDATA[
+			
 			import flash.events.Event;
 			import flash.events.MouseEvent;
 			import flash.events.TimerEvent;
@@ -38,6 +39,8 @@ limitations under the License.
 			import spark.events.IndexChangeEvent;
 			
 			import AIRViews.AccelerometerView;
+			import AIRViews.CameraView;
+			import AIRViews.GeolocationView;
 			import AIRViews.SQLiteView;
 			
 			import LayoutViews.AccordionLayoutView;
@@ -48,11 +51,13 @@ limitations under the License.
 			import LayoutViews.TileLayoutView;
 			import LayoutViews.TimeMachineLayoutView;
 			import LayoutViews.VerticalLayoutView;
+			import LayoutViews.StackLayoutView;
 			
 			import UIViews.ButtonBarView;
 			import UIViews.CalloutButtonView;
 			import UIViews.CheckboxView;
 			import UIViews.DateSpinnerView;
+			import UIViews.HscrubberView;
 			import UIViews.ListView;
 			import UIViews.MobileGridView;
 			import UIViews.RadiobuttonView;
@@ -62,203 +67,196 @@ limitations under the License.
 			
 			import views.HttpServiceView;
 			
-			public static var SLIDE_INTERVAL:int = 40;			
-			public static var STEPS:int = 6; 
-			
-			protected var _slideTimer:Timer = new Timer(SLIDE_INTERVAL, STEPS);
-			public static const CLICKED:String = "slideOutClicked";
-			protected var _buttonEnabled:Boolean = true;
-			protected var _startX:Number;
+			private var isOpen:Boolean;	
 			
 			
 			protected function init(event:FlexEvent):void
 			{
-				stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 
-				btn.addEventListener(MouseEvent.CLICK, slideButtonHandler);
-				_slideTimer.addEventListener(TimerEvent.TIMER, doSlide);		
-				_slideTimer.addEventListener(TimerEvent.TIMER_COMPLETE, slideComplete); 				
+				stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 			
+				lateralMenu.x = lateralMenu.width * -1;
 			}
-			
-			/*******************************************
-			 *used some code from Macomponents UISlideOutNavigation, replaced the actionscript elements with flex UI elements and was able to apply
-			 *the same drag to close behavior
-			 *********************************************/  
-			
-			public function open(animated:Boolean = true):void 
-			{				
-				if (!navigators.mouseEnabled)					
-					return;				
-				navigators.mouseEnabled = navigators.mouseChildren = false;				
-				if (animated) 
-				{					
-					_slideTimer.repeatCount = Math.max(Math.floor(STEPS * (1 - navigators.x / lateralMenu.width)), 1);					
-					_slideTimer.reset();				
-					_slideTimer.start();	
-				}					
-				else 
-				{	
-					navigators.x = lateralMenu.width;	
-					!navigators.mouseEnabled;
-				}		
-				stage.addEventListener(MouseEvent.CLICK, close);
-			}
-			
-			public function close(animated:Boolean = true):void 
-			{				
-				navigators.mouseEnabled = navigators.mouseChildren = true;				
-				if (animated) 
-				{					
-					_slideTimer.repeatCount = Math.max(Math.floor(STEPS * navigators.x / lateralMenu.width), 1);					
-					_slideTimer.reset();					
-					_slideTimer.start();					
-				}				
-				else 
-				{					
-					navigators.x = 0;				
-				}			
-			} 
 			
 			protected function changeHandler(event:IndexChangeEvent):void
 			{
-				close();
+				menuHandler();
 				navigator.pushView(componentsList.selectedItem.view);
-			}
-			
-			
-			
-			protected function slideButtonHandler(event:Event):void 
-			{				
-				dispatchEvent(new Event(CLICKED));				
-				navigators.mouseEnabled = navigators.mouseChildren = !navigators.mouseEnabled;		
-				if (_buttonEnabled) 
-				{					
-					_slideTimer.repeatCount = STEPS;				
-					_slideTimer.reset();				
-					_slideTimer.start();					
-				}
-				
 			}
 			
 			protected function mouseDown(event:MouseEvent):void 
 			{			
-				if (!navigators.mouseEnabled && mouseX > lateralMenu.width && mouseY > 45) 
-				{					
-					_startX = mouseX;				
-					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);					
-					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);			
-				}	
-				if (navigators.mouseEnabled && mouseX < 20)
+				//	if (!navigator.mouseEnabled && mouseX < 210 && mouseY > 45 && mouseY < navigator.height - 50) 
+				//	{								
+				//		lateralMenu.addEventListener(MouseEvent.MOUSE_UP, mouseUp);					
+				//		lateralMenu.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);			
+				//	}	
+				if (navigator.mouseEnabled && mouseX < 20 && mouseY > 45 && mouseY < navigator.height - 50)
 				{
-					_startX = mouseX;	
-					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpOpen);	
-					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveOpen);
+					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpIn);	
+					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
 				}
-			} 			
+			} 	
 			
-			protected function doSlide(event:TimerEvent):void 
+			/*	protected function mouseMove(event:MouseEvent):void 
 			{				
-				var slideTimer:Timer = Timer(event.currentTarget);				
-				var t:Number = slideTimer.currentCount/slideTimer.repeatCount;			
-				navigators.x = (navigators.mouseEnabled ? (1-t) : t) * lateralMenu.width;				
-			} 
+			navigator.mouseEnabled = false;		
+			var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
+			lateralMenu.startDrag(false, myRectangle );
+			trace(lateralMenu.x)
+			//lateralMenu.addEventListener(MouseEvent.CLICK,suppressClick,true,9999,true);
 			
-			protected function slideComplete(event:TimerEvent):void 
-			{				
-				removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);	
-				navigators.mouseEnabled;
-				if (!navigators.mouseEnabled) 
-				{					
-					addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);					
-				}				
-			} 
-			
-			protected function mouseMove(event:MouseEvent):void 
-			{							
-				
-				navigators.x = Math.max(Math.min(mouseX - _startX + lateralMenu.width, lateralMenu.width), 0);	
-				
 			} 
 			
 			protected function mouseUp(event:MouseEvent):void 
 			{		
-				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);				
-				navigators.mouseEnabled = navigators.mouseChildren = mouseX < lateralMenu.width / 2;			
-				_slideTimer.repeatCount = Math.max(navigators.mouseEnabled ? Math.floor(STEPS * navigators.x / lateralMenu.width) : Math.floor(STEPS * (1 - navigators.x / lateralMenu.width)), 1);				
-				_slideTimer.reset();				
-				_slideTimer.start();
-				
-			}
 			
-			protected function mouseMoveOpen(event:MouseEvent):void 
+			if (lateralMenu.x < -65) 
+			{
+			lateralMenu.stopDrag();
+			lateralMenu.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
+			lateralMenu.removeEventListener(MouseEvent.MOUSE_DOWN, mouseMove);					
+			moveOut.play();
+			isOpen == false;					
+			}
+			if (lateralMenu.x > -65) 
+			{
+			lateralMenu.stopDrag();
+			moveIn.play();
+			isOpen == true;					
+			}
+			lateralMenu.stopDrag();	
+			}	*/	
+			
+			
+			
+			protected function mouseDownIn(event:MouseEvent):void 
 			{				
-				navigators.mouseEnabled = navigators.mouseChildren = false;		
-				navigators.x = Math.max(Math.min(mouseX + _startX, lateralMenu.width), 0);				
+				//define area for lateralMenu to travel
+				var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
+				lateralMenu.startDrag(false, myRectangle );	
+				obfuscationGroup.visible = true;
+				obfuscationLayer.alpha = (lateralMenu.x + 216) * .47 / 200	
+				trace(obfuscationLayer.alpha);
 			} 
 			
-			protected function mouseUpOpen(event:MouseEvent):void 
+			protected function mouseUpIn(event:MouseEvent):void 
 			{		
-				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp1);
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove1);						
-				navigators.mouseEnabled = navigators.mouseChildren = mouseX < lateralMenu.width / 2;
-				_slideTimer.repeatCount = Math.max(navigators.mouseEnabled ? Math.floor(STEPS * navigators.x / lateralMenu.width) : Math.floor(STEPS * (1 - navigators.x / lateralMenu.width)), 1);		
-				_slideTimer.reset();				
-				_slideTimer.start();
-				
-				
-				
+				if (lateralMenu.x > -115) 
+				{
+					lateralMenu.stopDrag();
+					stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpIn);
+					stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
+					moveIn.play();
+					isOpen == true;	
+					currentState = "closed";
+				}
+				if (lateralMenu.x < -115) 
+				{
+					lateralMenu.stopDrag();
+					moveOut.play();
+					isOpen == false;	
+					obfuscationGroup.visible = false;
+					currentState = "open";
+				}
+				lateralMenu.stopDrag();
 			}
+			
+			protected function menuHandler():void
+			{
+				
+				if(lateralMenu.x == 0)
+				{
+					obfuscationGroup.visible = false;
+					parallelOut.play();			
+					isOpen = false;
+					currentState = "open";
+				} 
+				else if(lateralMenu.x == -215)
+				{
+					obfuscationGroup.visible = true;
+					parallelIn.play();		
+					isOpen = true;
+					currentState = "closed";
+				}
+			}
+			
 		]]>
 	</fx:Script>
-	
+	<s:states>
+		<s:State name="open"/>
+		<s:State name="closed"/>	
+	</s:states>
 	<fx:Declarations>
-		
+		<s:Parallel id="parallelIn">
+			<s:Fade id="fadeIn" target="{obfuscationLayer}" alphaFrom="0" alphaTo=".5" duration="300"/>
+			<s:Move id="moveIn" duration="300" target="{lateralMenu}" xTo="0"/>
+		</s:Parallel>
+		<s:Parallel id="parallelOut">
+			<s:Fade id="fadeOut" target="{obfuscationLayer}" alphaFrom=".5" alphaTo="0" duration="300"/>
+			<s:Move id="moveOut" duration="300" target="{lateralMenu}" xTo="-215"/>
+		</s:Parallel>
+		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon.png')" id="iconOpen" 
+								source480dpi="@Embed('assets/icons/480/icon.png')" 
+								source320dpi="@Embed('assets/icons/320/icon.png')" 
+								source240dpi="@Embed('assets/icons/240/icon.png')"
+								source160dpi="@Embed('assets/icons/160/icon.png')"/>
+		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon1.png')" id="iconClose" 
+								source480dpi="@Embed('assets/icons/480/icon1.png')" 
+								source320dpi="@Embed('assets/icons/320/icon1.png')" 
+								source240dpi="@Embed('assets/icons/240/icon1.png')"
+								source160dpi="@Embed('assets/icons/160/icon1.png')"/>
 	</fx:Declarations>
-	
-	
-	
-	<s:Group id="lateralMenu" width="225" y="0" height="100%">
-		
-		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="225" height="100%" 
-				change="changeHandler(event)" contentBackgroundColor="#000000">
+	<s:ViewNavigator id="navigator" firstView="views.BlogView" width="100%" height="100%">
+		<s:navigationContent>
+			<s:Button icon.open="{iconOpen}" icon.closed="{iconClose}" id="btn" click="menuHandler()"/>
+		</s:navigationContent>
+	</s:ViewNavigator>
+	<s:Group width="100%" height="100%" click="menuHandler()" id="obfuscationGroup" y="43" visible="false"> 
+		<s:Rect id="obfuscationLayer" width="100%" height="100%" alpha="0">
+			<s:fill >
+				<s:SolidColor color="0x000000" />
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	<s:Group id="lateralMenu" width="215" y="43" height="100%">
+		<s:RectangularDropShadow left="0" right="0" top="0" bottom="0" alpha=".4" distance="5" angle="90" 
+								 blurX="5" blurY="5" color="0x000000"/>
+		<s:List id="componentsList" itemRenderer="renderers.MenuRenderer" width="215" height="100%" styleName="RobotoEmbedded" 
+				change="changeHandler(event)" contentBackgroundColor="#eeeeee" downColor="#e0e0e0" selectionColor="#33B5E5">
 			<s:ArrayList>
-				<fx:Object label="UI Components" type="separator"/>			
+				<fx:Object label="UI COMPONENTS" type="separator"/>			
 				<fx:Object label="ButtonBar" type="view" view="{ButtonBarView}"/>
 				<fx:Object label="CalloutButton" type="view" view="{CalloutButtonView}"/>
 				<fx:Object label="CheckBox" type="view" view="{CheckboxView}"/>
 				<fx:Object label="DateSpinner" type="view" view="{DateSpinnerView}"/>
+				<fx:Object label="HSlider" type="view" view="{HscrubberView}"/>
 				<fx:Object label="List" type="view" view="{ListView}"/>
 				<fx:Object label="MobileGrid" type="view" view="{MobileGridView}"/>
 				<fx:Object label="RadioButton" type="view" view="{RadiobuttonView}"/>
 				<fx:Object label="SpinnerList" type="view" view="{SpinnerListView}"/>
-				<fx:Object label="TextInput" type="view" view="{TextInputView}"/>
+				<fx:Object label="TextInput" type="view" view="{TextInputView}"/>			
 				<fx:Object label="ToggleSwitch" type="view" view="{ToggleSwitchView}"/>
 				
-				<fx:Object label="Layouts" type="separator"/>				
-				<fx:Object label="HorizontalLayout" type="view" view="{HorizontalLayoutView}"/>
-				<fx:Object label="VerticalLayout" type="view" view="{VerticalLayoutView}"/>
-				<fx:Object label="TileLayout" type="view" view="{TileLayoutView}"/>
-				<fx:Object label="CoverFlowLayout" type="view" view="{CoverFlowLayoutView}"/>
-				<fx:Object label="TimeMachineLayout" type="view" view="{TimeMachineLayoutView}"/>
-				<fx:Object label="RolodexLayout" type="view" view="{RolodexLayoutView}"/>
-				<fx:Object label="CarouselLayout" type="view" view="{CarouselLayoutView}"/>
-				<fx:Object label="AccordionLayout" type="view" view="{AccordionLayoutView}"/>
+				<fx:Object label="LAYOUTS" type="separator"/>	
+				<fx:Object label="Accordion Layout" type="view" view="{AccordionLayoutView}"/>
+				<fx:Object label="Carousel Layout" type="view" view="{CarouselLayoutView}"/>
+				<fx:Object label="CoverFlow Layout" type="view" view="{CoverFlowLayoutView}"/>
+				<fx:Object label="Horizontal Layout" type="view" view="{HorizontalLayoutView}"/>
+				<fx:Object label="Rolodex Layout" type="view" view="{RolodexLayoutView}"/>
+				<fx:Object label="Stack Layout" type="view" view="{StackLayoutView}"/>
+				<fx:Object label="Tile Layout" type="view" view="{TileLayoutView}"/>						
+				<fx:Object label="TimeMachine Layout" type="view" view="{TimeMachineLayoutView}"/>
+				<fx:Object label="Vertical Layout" type="view" view="{VerticalLayoutView}"/>
 				
-				<fx:Object label="AIR APIs" type="separator"/>				
-				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
+				<fx:Object label="AIR APIs" type="separator"/>								
 				<fx:Object label="Accelerometer" type="view" view="{AccelerometerView}"/>
+				<!--fx:Object label="Camera" type="view" view="{CameraView}"/-->
+				<fx:Object label="Geolocation" type="view" view="{GeolocationView}"/>
+				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
 				
-				<fx:Object label="Data Access" type="separator"/>			
+				<fx:Object label="DATA ACCESS" type="separator"/>			
 				<fx:Object label="HTTPService" type="view" view="{HttpServiceView}"/>
 			</s:ArrayList>
 		</s:List>
 	</s:Group>
 	
-	<s:Group id="navigators" width="{FlexGlobals.topLevelApplication.width}" height="{FlexGlobals.topLevelApplication.height}" >
-		<s:ViewNavigator id="navigator" firstView="views.BlogView" width="100%" height="100%">
-			<s:navigationContent>
-				<s:Button icon="@Embed('assets/images/logo.png')" height="35" width="77" label="Menu" id="btn"/>
-			</s:navigationContent>
-		</s:ViewNavigator>
-	</s:Group>
 </s:Application>

@@ -18,7 +18,10 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="Accelerometer" viewActivate="init()" viewDeactivate="deactivate(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="Accelerometer" 
+		viewActivate="init()" 
+		viewDeactivate="deactivate(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -28,7 +31,6 @@ limitations under the License.
 			import flash.sensors.Accelerometer;
 			
 			import spark.events.ViewNavigatorEvent;
-			import spark.skins.mobile.TextAreaSkin;		
 			
 			private var ball:Sprite;
 			private var accelerometer:Accelerometer;        
@@ -77,13 +79,13 @@ limitations under the License.
 					ball.x = RADIUS;
 					xSpeed = 0;
 				}
-				
-				else if (newX > stage.stageWidth - RADIUS)
+					
+				else if (newX > this.width - RADIUS)
 				{
-					ball.x = stage.stageWidth - RADIUS;
+					ball.x = this.width - RADIUS;
 					xSpeed = 0;
 				}
-				
+					
 				else
 				{
 					ball.x += xSpeed;
@@ -94,13 +96,13 @@ limitations under the License.
 					ball.y = RADIUS;
 					ySpeed = 0;
 				}
-				
+					
 				else if (newY > this.height - RADIUS)
 				{
 					ball.y = this.height - RADIUS;
 					ySpeed = 0;
 				}
-				
+					
 				else
 				{
 					ball.y += ySpeed;
@@ -120,9 +122,12 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
@@ -134,15 +139,14 @@ limitations under the License.
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
 	</s:states>
-	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" source480dpi="assets/icons/480/dock.png"/>
 	</fx:Declarations>
-
 	<s:SpriteVisualElement id="container" includeIn="DemoState"/>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The Accelerometer class dispatches events based on activity detected by the device's motion sensor. This data represents the device's location or movement along a 3-dimensional axis. When the device moves, the sensor detects this movement and returns acceleration data. The Accelerometer class provides methods to query whether or not accelerometer is supported, and also to set the rate at which acceleration events are dispatched.
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" text="The Accelerometer class dispatches events based on activity detected by the device's motion sensor. This data represents the device's location or movement along a 3-dimensional axis. When the device moves, the sensor detects this movement and returns acceleration data. The Accelerometer class provides methods to query whether or not accelerometer is supported, and also to set the rate at which acceleration events are dispatched.
 				&#xd; &#xd;Note: Use the Accelerometer.isSupported property to test the runtime environment for the ability to use this feature. While the Accelerometer class and its members are accessible to the Runtime Versions listed for each API entry, the current environment for the runtime determines the availability of this feature. For example, you can compile code using the Accelerometer class properties for Flash Player 10.1, but you need to use the Accelerometer.isSupported property to test for the availability of the Accelerometer feature in the current deployment environment for the Flash Player runtime. If Accelerometer.isSupported is true at runtime, then Accelerometer support currently exists."/>
 	
 	<s:actionContent>
