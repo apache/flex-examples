@@ -18,7 +18,9 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="SQLite" viewActivate="init(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="SQLite" 
+		viewActivate="init(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -26,7 +28,6 @@ limitations under the License.
 			import mx.events.FlexEvent;
 			
 			import spark.events.ViewNavigatorEvent;
-			import spark.skins.mobile.TextAreaSkin;
 			
 			public var conn:SQLConnection;
 			public var db:File;
@@ -41,7 +42,8 @@ limitations under the License.
 				conn.openAsync(db);
 			}
 			
-			private function loadEntries():void{
+			private function loadEntries():void
+			{
 				myStatement = new SQLStatement();
 				myStatement.sqlConnection = conn;
 				myStatement.addEventListener(SQLEvent.RESULT, openDatabaseResult);				
@@ -50,7 +52,8 @@ limitations under the License.
 				myStatement.execute();
 			}
 			
-			private function openDatabaseHandler(event:SQLEvent):void{
+			private function openDatabaseHandler(event:SQLEvent):void
+			{
 				myStatement = new SQLStatement();
 				myStatement.sqlConnection = conn;
 				myStatement.addEventListener(SQLEvent.RESULT, loadDatabaseResult);				
@@ -59,26 +62,30 @@ limitations under the License.
 				myStatement.execute();
 			}
 			
-			private function loadDatabaseResult(event:SQLEvent):void{
+			private function loadDatabaseResult(event:SQLEvent):void
+			{
 				loadEntries();
 			}
 			
-			private function openDatabaseResult(event:SQLEvent):void{
-				var itemsArray:Array = new Array();
-				
+			private function openDatabaseResult(event:SQLEvent):void
+			{
+				var itemsArray:Array = new Array();		
 				var result:SQLResult = myStatement.getResult();
 				
-				if(result.data != null){
-					for(var i:int = 0; i<result.data.length; i++){
+				if(result.data != null)
+				{
+					for(var i:int = 0; i<result.data.length; i++)
+					{
 						itemsArray.push({label:unescape(result.data[i].itemText)});					
 					}
 				}
-							
+				
 				itemsCollection = new ArrayCollection(itemsArray);
 				itemsList.dataProvider = itemsCollection;
 			}
 			
-			private function modifyDatabaseResult(event:SQLEvent):void{
+			private function modifyDatabaseResult(event:SQLEvent):void
+			{
 				loadEntries();
 			}
 			
@@ -100,9 +107,12 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
@@ -116,17 +126,20 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" source480dpi="assets/icons/480/dock.png"/>
 		<s:ArrayCollection id="itemsCollection"/>
 	</fx:Declarations>
 	
-	<s:TextInput id="textInput" includeIn="DemoState" enter="addItemHandler()" skinClass="spark.skins.mobile.TextInputSkin" y="10" left="5" right="60" height="40"/>
+	<s:TextInput id="textInput" includeIn="DemoState" enter="addItemHandler()" y="10" left="5" right="60" height="40"/>
 	<s:Button label="Add" y="10" includeIn="DemoState" width="50" height="40" right="5" click="addItemHandler()"/>
 	
 	<s:List id="itemsList" includeIn="DemoState" width="100%" bottom="0" top="60"/>
 	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="A SQLConnection instance is used to manage the creation of and connection to local SQL database files (local databases).
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" 
+				text="A SQLConnection instance is used to manage the creation of and connection to local SQL database files (local databases).
 				&#xd; &#xd;The functionality of the SQLConnection class falls into several categories:
 				
 				&#xd; &#xd;A local SQL database file is created or opened by calling the open() method or the SQLConnection instance to the SQLStatement's sqlConnection property.
