@@ -18,11 +18,11 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="SpinnerList">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="SpinnerList">
 	<fx:Script>
 		<![CDATA[
 			import spark.events.IndexChangeEvent;
-			import spark.skins.mobile.TextAreaSkin;
 			
 			protected function spinnerListHandler(event:IndexChangeEvent):void
 			{
@@ -31,86 +31,93 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
 			
 		]]>
-	</fx:Script>
-	
+	</fx:Script>	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
 	</s:states>
-	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
 	</fx:Declarations>
-	
-	<s:SpinnerListContainer includeIn="DemoState" width="100%">
-		<s:SpinnerList id="spinnerList1" change="spinnerListHandler(event)" width="50%" height="150">
-			<s:ArrayCollection>
-				<fx:Object label="Item A 1"/>
-				<fx:Object label="Item A 2"/>
-				<fx:Object label="Item A 3"/>
-				<fx:Object label="Item A 4"/>
-				<fx:Object label="Item A 5"/>
-				<fx:Object label="Item A 6"/>
-				<fx:Object label="Item A 7"/>
-				<fx:Object label="Item A 8"/>
-				<fx:Object label="Item A 9"/>
-				<fx:Object label="Item A 10"/>
-				<fx:Object label="Item A 11"/>
-				<fx:Object label="Item A 12"/>
-				<fx:Object label="Item A 13"/>
-				<fx:Object label="Item A 14"/>
-				<fx:Object label="Item A 15"/>
-				<fx:Object label="Item A 16"/>
-				<fx:Object label="Item A 17"/>
-				<fx:Object label="Item A 18"/>
-				<fx:Object label="Item A 19"/>
-				<fx:Object label="Item A 20"/>
-			</s:ArrayCollection>
-		</s:SpinnerList>
-		
-		<s:SpinnerList id="spinnerList2" change="spinnerListHandler(event)" width="50%" height="150">
-			<s:ArrayCollection>
-				<fx:Object label="Item B 1"/>
-				<fx:Object label="Item B 2"/>
-				<fx:Object label="Item B 3"/>
-				<fx:Object label="Item B 4"/>
-				<fx:Object label="Item B 5"/>
-				<fx:Object label="Item B 6"/>
-				<fx:Object label="Item B 7"/>
-				<fx:Object label="Item B 8"/>
-				<fx:Object label="Item B 9"/>
-				<fx:Object label="Item B 10"/>
-				<fx:Object label="Item B 11"/>
-				<fx:Object label="Item B 12"/>
-				<fx:Object label="Item B 13"/>
-				<fx:Object label="Item B 14"/>
-				<fx:Object label="Item B 15"/>
-				<fx:Object label="Item B 16"/>
-				<fx:Object label="Item B 17"/>
-				<fx:Object label="Item B 18"/>
-				<fx:Object label="Item B 19"/>
-				<fx:Object label="Item B 20"/>
-			</s:ArrayCollection>
-		</s:SpinnerList>
-	</s:SpinnerListContainer>
-	
-	
-	<s:Label id="label" horizontalCenter="0" textAlign="center" bottom="20"/>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The SpinnerList component displays a list of items. The item in the center of the list is always the selectedItem. By default, the list wraps around.
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" includeIn="DemoState" verticalAlign="middle">
+		<s:SpinnerListContainer width="100%" horizontalCenter="0">
+			<s:SpinnerList id="spinnerList1" change="spinnerListHandler(event)" width="50%" height="150" textAlign="center">
+				<s:ArrayCollection>
+					<fx:Object label="Item A 1"/>
+					<fx:Object label="Item A 2"/>
+					<fx:Object label="Item A 3"/>
+					<fx:Object label="Item A 4"/>
+					<fx:Object label="Item A 5"/>
+					<fx:Object label="Item A 6"/>
+					<fx:Object label="Item A 7"/>
+					<fx:Object label="Item A 8"/>
+					<fx:Object label="Item A 9"/>
+					<fx:Object label="Item A 10"/>
+					<fx:Object label="Item A 11"/>
+					<fx:Object label="Item A 12"/>
+					<fx:Object label="Item A 13"/>
+					<fx:Object label="Item A 14"/>
+					<fx:Object label="Item A 15"/>
+					<fx:Object label="Item A 16"/>
+					<fx:Object label="Item A 17"/>
+					<fx:Object label="Item A 18"/>
+					<fx:Object label="Item A 19"/>
+					<fx:Object label="Item A 20"/>
+				</s:ArrayCollection>
+			</s:SpinnerList>
+			<s:Spacer width="10"/>
+			<s:SpinnerList id="spinnerList2" change="spinnerListHandler(event)" width="50%" height="150" textAlign="center">
+				<s:ArrayCollection>
+					<fx:Object label="Item B 1"/>
+					<fx:Object label="Item B 2"/>
+					<fx:Object label="Item B 3"/>
+					<fx:Object label="Item B 4"/>
+					<fx:Object label="Item B 5"/>
+					<fx:Object label="Item B 6"/>
+					<fx:Object label="Item B 7"/>
+					<fx:Object label="Item B 8"/>
+					<fx:Object label="Item B 9"/>
+					<fx:Object label="Item B 10"/>
+					<fx:Object label="Item B 11"/>
+					<fx:Object label="Item B 12"/>
+					<fx:Object label="Item B 13"/>
+					<fx:Object label="Item B 14"/>
+					<fx:Object label="Item B 15"/>
+					<fx:Object label="Item B 16"/>
+					<fx:Object label="Item B 17"/>
+					<fx:Object label="Item B 18"/>
+					<fx:Object label="Item B 19"/>
+					<fx:Object label="Item B 20"/>
+				</s:ArrayCollection>
+			</s:SpinnerList>
+		</s:SpinnerListContainer>
+		<s:Spacer height="10"/>
+		<s:Label id="label" horizontalCenter="0" textAlign="center" />
+	</s:VGroup>
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The SpinnerList component displays a list of items. The item in the center of the list is always the selectedItem. By default, the list wraps around.
 				&#xd;&#xd;You can have multiple SpinnerList controls arranged horizontally within a single border by wrapping then in a SpinnerListContainer."/>
-	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
 	</s:actionContent>
-
 </s:View>

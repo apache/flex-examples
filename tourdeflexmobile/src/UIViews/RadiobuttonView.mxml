@@ -18,11 +18,12 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="RadioButton">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="RadioButton">
 	
 	<fx:Script>
 		<![CDATA[
-			import spark.skins.mobile.TextAreaSkin;
+			
 			protected function radiobuttonHandler(event:Event):void
 			{
 				label.text = event.target.label + " Selected.";
@@ -30,40 +31,45 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
 		]]>
 	</fx:Script>
-	
-	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
-
-		<s:RadioButtonGroup id="radiogroup1"/>
-	</fx:Declarations>
-	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
 	</s:states>
-
-	<s:VGroup includeIn="DemoState" horizontalCenter="0" y="20">
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+		<s:RadioButtonGroup id="radiogroup1"/>
+	</fx:Declarations>	
+	<s:VGroup includeIn="DemoState" horizontalAlign="center" width="100%" height="100%" verticalAlign="middle">
 		<s:RadioButton change="radiobuttonHandler(event)" label="RadioButton 1" groupName="radiogroup1"/>
 		<s:RadioButton change="radiobuttonHandler(event)" label="RadioButton 2" groupName="radiogroup1"/>
 		<s:RadioButton change="radiobuttonHandler(event)" label="RadioButton 3" groupName="radiogroup1"/>
-	</s:VGroup>
-	
-	<s:Label id="label" horizontalCenter="0" textAlign="center" bottom="20"/>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The RadioButton component allows the user make a single choice within a set of mutually exclusive choices. A RadioButtonGroup is composed of two or more RadioButton components with the same groupName property. While grouping RadioButton instances in a RadioButtonGroup is optional, a group lets you do things like set a single event handler on a group of RadioButtons, rather than on each individual RadioButton.
-				&#xd;&#xd;The RadioButton group can refer to the a group created by the RadioButtonGroup tag. The user selects only one member of the group at a time. Selecting an unselected group member deselects the currently selected RadioButton component within that group.
-																		  
+		<s:Spacer height="10"/>
+		<s:Label id="label" horizontalCenter="0" textAlign="center" bottom="20"/>
+	</s:VGroup>		
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The RadioButton component allows the user make a single choice within a set of mutually exclusive choices. A RadioButtonGroup is composed of two or more RadioButton components with the same groupName property. While grouping RadioButton instances in a RadioButtonGroup is optional, a group lets you do things like set a single event handler on a group of RadioButtons, rather than on each individual RadioButton.
+				&#xd;&#xd;The RadioButton group can refer to the a group created by the RadioButtonGroup tag. The user selects only one member of the group at a time. Selecting an unselected group member deselects the currently selected RadioButton component within that group.																		  
 				&#xd;&#xd; To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>
-	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
 	</s:actionContent>

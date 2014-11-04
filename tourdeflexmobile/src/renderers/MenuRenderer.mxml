@@ -19,8 +19,10 @@ limitations under the License.
 -->
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				height="40" width="100%" cacheAsBitmap="false">
-
+				height="35" 
+				width="100%" 
+				cacheAsBitmap="false">
+	
 	<fx:Script>
 		<![CDATA[
 			
@@ -29,20 +31,23 @@ limitations under the License.
 				
 				if(data){
 					
-					if(data.type == "view"){
+					if(data.type == "view")
+					{
 						autoDrawBackground = true;
 						currentState = "ViewState";		
-					} else if(data.type == "separator"){
+					} 
+					else if(data.type == "separator")
+					{
 						autoDrawBackground = false;
-						opaqueBackground = 0x464646;
+						//opaqueBackground = 0xcdcdcc;
 						currentState = "SeparatorState";
-					} else {
+					} 
+					else 
+					{
 						autoDrawBackground = true;
 						currentState = "ViewState";	
-					}
-					
-					itemLabel.text = data.label;
-					
+					}		
+					itemLabel.text = data.label;				
 				}
 			}
 			
@@ -54,6 +59,11 @@ limitations under the License.
 		<s:State name="SeparatorState"/>
 	</s:states>
 	
-	<s:Label id="itemLabel"  color.SeparatorState="#888888" color.ViewState="#FFFFFF" x="10" verticalCenter="0"/>
-	
+	<s:Label id="itemLabel" color.SeparatorState="#58585b" color.ViewState="#59595c" x.SeparatorState="10" x.ViewState="15" verticalCenter="0" verticalAlign="middle" 
+			 fontWeight.SeparatorState="bold" height="100%" fontFamily.SeparatorState="RobotoEmbeddedBold"/>
+	<s:Line width="100%" includeIn="SeparatorState" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="0xdddddd" weight="1" alpha="1"/>
+		</s:stroke>
+	</s:Line>
 </s:ItemRenderer>
