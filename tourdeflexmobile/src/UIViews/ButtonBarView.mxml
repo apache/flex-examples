@@ -23,7 +23,6 @@ limitations under the License.
 	<fx:Script>
 		<![CDATA[
 			import spark.events.IndexChangeEvent;
-			import spark.skins.mobile.TextAreaSkin;
 			
 			protected function buttonbarHandler(event:IndexChangeEvent):void
 			{
@@ -32,47 +31,51 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
 			
 		]]>
 	</fx:Script>
-	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
 	</s:states>
-	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
 	</fx:Declarations>
-	
-	<s:ButtonBar id="buttonbar" includeIn="DemoState" change="buttonbarHandler(event)" left="5" right="5" top="5">
-		<s:ArrayList>
-			<fx:Object label="Button 1"/>
-			<fx:Object label="Button 2"/>
-			<fx:Object label="Button 3"/>
-		</s:ArrayList>
-	</s:ButtonBar>
-
-	<s:Label id="label" includeIn="DemoState" horizontalCenter="0" textAlign="center" bottom="20"/>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The ButtonBar control defines a horizontal group of logically related buttons with a common look and navigation.
-				&#xd; &#xd;The typical use for a button bar is for grouping a set of related buttons together, which gives them a common look and navigation, and handling the logic for the change event in a single place.
-				
-				&#xd; &#xd;The ButtonBar control creates Button controls based on the value of its dataProvider property. Use methods such as addItem() and removeItem() to manipulate the dataProvider property to add and remove data items. The ButtonBar control automatically adds or removes the necessary children based on changes to the dataProvider property.
-				
-				&#xd; &#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers.
-				
-				&#xd; &#xd;For non-mobile projects, you can use the ButtonBar control to set the active child of a ViewStack container, as the following example shows:
-				
-				&#xd; &#xd;Note: The Spark list-based controls (the Spark ListBase class and its subclasses such as ButtonBar, ComboBox, DropDownList, List, and TabBar) do not support the BasicLayout class as the value of the layout property. Do not use BasicLayout with the Spark list-based controls."/>
-	
+	<s:VGroup width="100%" height="100%" includeIn="DemoState" horizontalAlign="center" verticalAlign="middle">
+		<s:ButtonBar id="buttonbar" change="buttonbarHandler(event)">
+			<s:ArrayList>
+				<fx:Object label="Button 1"/>
+				<fx:Object label="Button 2"/>
+				<fx:Object label="Button 3"/>
+			</s:ArrayList>
+		</s:ButtonBar>
+		<s:Spacer height="10"/>
+		<s:Label id="label"  horizontalCenter="0" textAlign="center"/>
+	</s:VGroup>	
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" text="The ButtonBar control defines a horizontal group of logically related buttons with a common look and navigation.
+				&#xd; &#xd;The typical use for a button bar is for grouping a set of related buttons together, which gives them a common look and navigation, and handling the logic for the change event in a single place.				
+				&#xd; &#xd;The ButtonBar control creates Button controls based on the value of its dataProvider property. Use methods such as addItem() and removeItem() to manipulate the dataProvider property to add and remove data items. The ButtonBar control automatically adds or removes the necessary children based on changes to the dataProvider property.				
+				&#xd; &#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers.			
+				&#xd; &#xd;For non-mobile projects, you can use the ButtonBar control to set the active child of a ViewStack container, as the following example shows:				
+				&#xd; &#xd;Note: The Spark list-based controls (the Spark ListBase class and its subclasses such as ButtonBar, ComboBox, DropDownList, List, and TabBar) do not support the BasicLayout class as the value of the layout property. Do not use BasicLayout with the Spark list-based controls."/>	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
 	</s:actionContent>

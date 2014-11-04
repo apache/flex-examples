@@ -23,38 +23,92 @@ limitations under the License.
 	<fx:Script>
 		<![CDATA[
 			import spark.primitives.BitmapImage;
+			import spark.skins.spark.DefaultComplexItemRenderer;
+			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				var random:Number = Math.ceil(Math.random()*3);
-				
-				var miniGroup:Group = new Group();
-				group.addElement(miniGroup);
-				
-				var bitmapImage:BitmapImage = new BitmapImage();
-				bitmapImage.width =  Math.ceil(Math.random()*100);
-				bitmapImage.height = bitmapImage.width;
-				bitmapImage.source = "assets/images/box"+random+".png";
-				miniGroup.addElement(bitmapImage);
-				
-				//group.verticalScrollPosition = group.contentHeight;
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
 			}
 		]]>
 	</fx:Script>
-	
-	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1.png')" 
+								source240dpi="@Embed('assets/icons/240/1.png')" 
+								source320dpi="@Embed('assets/icons/320/1.png')"
+								source480dpi="@Embed('assets/icons/480/1.png" id="box1"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/2.png')" 
+								source240dpi="@Embed('assets/icons/240/2.png')" 
+								source320dpi="@Embed('assets/icons/320/2.png')"
+								source480dpi="@Embed('assets/icons/480/2.png" id="box2"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/3.png')" 
+								source240dpi="@Embed('assets/icons/240/3.png')" 
+								source320dpi="@Embed('assets/icons/320/3.png')"
+								source480dpi="@Embed('assets/icons/480/3.png" id="box3"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/about.png')" id="aboutIcon"  
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')"
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/dock.png')" id="demoIcon"
+								source240dpi="@Embed('assets/icons/240/dock.png')"  
+								source320dpi="@Embed('assets/icons/320/dock.png')"
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>	
 	<s:actionContent>
-		<s:Button click="buttonHandler(event)">
-			<s:icon>
-				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/add.png')" source240dpi="@Embed('assets/icons/240/add.png')" source320dpi="@Embed('assets/icons/320/add.png')" />
-			</s:icon>
-		</s:Button>
-	</s:actionContent>
-			
-	<s:Scroller id="scroller" width="100%" height="100%">
-		<s:Group id="group">
-			<s:layout>
-				<s:TileLayout orientation="rows" columnWidth="100" rowHeight="100" useVirtualLayout="true" />
-			</s:layout>
-		</s:Group>
-	</s:Scroller>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>	
+	<s:List id="list" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" itemRenderer="spark.skins.spark.DefaultComplexItemRenderer" includeIn="DemoState">
+		<s:layout>
+			<s:TileLayout    columnAlign="justifyUsingWidth"
+							 columnWidth="NaN"
+							 verticalAlign="middle"
+							 horizontalAlign="center"
+							 horizontalGap="6"
+							 orientation="rows" 
+							 rowAlign="top"
+							 verticalGap="6"/>
+		</s:layout>
+		<s:dataProvider>
+			<s:ArrayList>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box1}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box2}" scaleX=".7" scaleY=".7"/>
+				<s:BitmapImage source="{box3}" scaleX=".7" scaleY=".7"/>
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:List>
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The TileLayout class arranges layout elements in columns and rows of equally-sized cells. The TileLayout class uses a number of properties that control orientation, count, size, gap and justification of the columns and the rows as well as element alignment within the cells. 				
+				&#xd; &#xd;Per-element supported constraints are percentWidth and percentHeight. Element's minimum and maximum sizes are always be respected and where possible, an element's size is limited to less then or equal of the cell size.
+				&#xd; &#xd;When not explicitly set, the columnWidth property is calculated as the maximum preferred bounds width of all elements and the columnHeight property is calculated as the maximum preferred bounds height of all elements.
+				&#xd; &#xd;When not explicitly set, the columnCount and rowCount properties are calculated from any explicit width and height settings for the layout target, and columnWidth and columnHeight. In case none is specified, the columnCount and rowCount values are picked so that the resulting pixel area is as square as possible
+				&#xd; &#xd;The measured size is calculated from the columnCount, rowCount, columnWidth, rowHeight properties and the gap sizes.
+				&#xd; &#xd;The default measured size, when no properties were explicitly set, is as square as possible area and is large enough to fit all elements.
+				&#xd; &#xd;In other cases the measured size may not be big enough to fit all elements. For example, when both columnCount and rowCount are explicitly set to values such that columnCount * rowCount less than element count.
+				&#xd; &#xd;The minimum measured size is calculated the same way as the measured size but it's guaranteed to encompass enough rows and columns along the minor axis to fit all elements.
+				"/>
 </s:View>

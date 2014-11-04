@@ -16,91 +16,93 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+example taken from http://flex.apache.org/asdoc/spark/components/MobileGrid.html#columns
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="MobileGrid" xmlns:ns="http://flex.apache.org/experimental/ns">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="MobileGrid" 
+		xmlns:ns="http://flex.apache.org/experimental/ns"
+		creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
-			import spark.skins.mobile.TextAreaSkin;
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;		
+			
+			private const dataProvider:ArrayCollection = new ArrayCollection();
+			
+			private function creationCompleteHandler(event:FlexEvent):void
+			{			
+				var src:Array = [];
+				for (var i:int = 0; i <50; i++)
+				{
+					src.push({Name: "John_" + i, Surname: "Doe_" + i, Age: 5 + i, status: 1000 + i, Comments: "Sed tamen"});
+					src.push({Name: "Paul_" + i, Surname: "Smith_" + i, Age: 12 + i, status: 2000 + i, Comments: "Quanta autem" });
+					src.push({Name: "Sarah_" + i, Surname: "Lee_" + i, Age: 42 + i, status: 2000 + i, Comments: "Ideo urbs"});
+				}
+				dataProvider.source = src;
+			}
+			
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
+			
+			private function fullName(o:Object):String
+			{
+				return o.Name + " " + o.Surname;
+			}
+			
 		]]>
-	</fx:Script>
-	
+	</fx:Script>	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
-	</s:states>
-	
+	</s:states>	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
-	</fx:Declarations>
-	
-	<ns:MobileGrid includeIn="DemoState" width="100%" height="100%">
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+	<ns:MobileGrid includeIn="DemoState" width="100%" height="100%" sortableColumns="true" dataProvider="{dataProvider}" contentBackgroundColor="0xFFFFFF" 
+				   alternatingItemColors="[0xFFFFFF, 0xFFFFFF]" color="0x00000" selectionColor="0x33B5E5"> 
 		<ns:columns>
-			<ns:MobileGridColumn width="33%" headerText="Column 1" dataField="label"/>
-			<ns:MobileGridColumn width="33%" headerText="Column 2" dataField="label"/>
-			<ns:MobileGridColumn width="33%" headerText="Column 3" dataField="label"/>
+			<ns:MobileGridColumn dataField="Name" styleName="bold" width="30%"/>
+			<ns:MobileGridColumn dataField="Surname" styleName="bold" width="30%"/>
+			<ns:MobileGridColumn dataField="Comments" width="40%"/>
 		</ns:columns>
-		<s:ArrayList>
-			<fx:Object label="Item 1"/>
-			<fx:Object label="Item 2"/>
-			<fx:Object label="Item 3"/>
-			<fx:Object label="Item 4"/>
-			<fx:Object label="Item 5"/>
-			<fx:Object label="Item 6"/>
-			<fx:Object label="Item 7"/>
-			<fx:Object label="Item 8"/>
-			<fx:Object label="Item 9"/>
-			<fx:Object label="Item 10"/>
-			<fx:Object label="Item 11"/>
-			<fx:Object label="Item 12"/>
-			<fx:Object label="Item 13"/>
-			<fx:Object label="Item 14"/>
-			<fx:Object label="Item 15"/>
-			<fx:Object label="Item 16"/>
-			<fx:Object label="Item 17"/>
-			<fx:Object label="Item 18"/>
-			<fx:Object label="Item 19"/>
-			<fx:Object label="Item 20"/>
-			<fx:Object label="Item 21"/>
-			<fx:Object label="Item 22"/>
-			<fx:Object label="Item 23"/>
-		</s:ArrayList>
-	</ns:MobileGrid>
-	
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The MobileGrid displays a collection of items in a grid of rows and columns and column headers and is optimized for speed on mobile devices.
-				&#xd;&#xd;The MobileGrid component provides the following features:
-				
+	</ns:MobileGrid>	
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" text="The MobileGrid displays a collection of items in a grid of rows and columns and column headers and is optimized for speed on mobile devices.
+				&#xd;&#xd;The MobileGrid component provides the following features:				
 				&#xd;&#xd;user can swipe through the rows in the datagrid.
 				&#xd;&#xd;supports single selection of a row.
 				&#xd;&#xd;rows can be sorted according to a given column by clicking on the column's header.
 				&#xd;&#xd;cells can be displayed as text in different fonts and formats, as images, or using a custom renderer.
 				&#xd;&#xd;default skin uses dark shades of gray, and is available in different screen densities.
-				&#xd;&#xd;It's important to understand that MobileGrid does not have all the capabilities and flexibility of it's desktop equivalent, in order to ensure optimal display and scrolling performance on mobile devices.
-				
-				&#xd;&#xd;Typically, the following features are not available in MobileGrid:
-				
+				&#xd;&#xd;It's important to understand that MobileGrid does not have all the capabilities and flexibility of it's desktop equivalent, in order to ensure optimal display and scrolling performance on mobile devices.			
+				&#xd;&#xd;Typically, the following features are not available in MobileGrid:			
 				&#xd;&#xd;multiple selection is not supported
 				&#xd;&#xd;it's not possible to interactively reorder columns
 				&#xd;&#xd;MobileGrid does not scroll horizontally, even when the column widths exceeds the component's width.
 				&#xd;&#xd;custom cell renderers must be designed with care, preferably in ActionScript, to ensure good display performance
-				&#xd;&#xd;Internally, MobileGrid inherits for Mobile spark.List component rather than any Grid or DataGrid, which means that all cell renderers in a single row are managed by one single MobileGridRowRenderer that delegates the individual cell renderers to light-weight sub-renderers.
-				
-				&#xd;&#xd;You usually don't access this internal row renderer yourself, and will rather define the individual cell renderers.
-				
-				&#xd;&#xd;This technique ensures optimal display and memory performance, which is critical for mobile devices, at the price of less flexibility for cell renderers."/>
-	
-	<s:actionContent>
-		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
-	</s:actionContent>
+				&#xd;&#xd;Internally, MobileGrid inherits for Mobile spark.List component rather than any Grid or DataGrid, which means that all cell renderers in a single row are managed by one single MobileGridRowRenderer that delegates the individual cell renderers to light-weight sub-renderers.				
+				&#xd;&#xd;You usually don't access this internal row renderer yourself, and will rather define the individual cell renderers.				
+				&#xd;&#xd;This technique ensures optimal display and memory performance, which is critical for mobile devices, at the price of less flexibility for cell renderers."/>	
 </s:View>
