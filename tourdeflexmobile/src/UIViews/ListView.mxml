@@ -18,34 +18,43 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="List">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="List">
 	
 	<fx:Script>
 		<![CDATA[
-			import spark.skins.mobile.TextAreaSkin;
+			
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
 			
 		]]>
-	</fx:Script>
-	
+	</fx:Script>	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
-	</s:states>
-	
+	</s:states>	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
-	</fx:Declarations>
-	
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>	
 	<s:List includeIn="DemoState" width="100%" height="100%">
 		<s:ArrayList>
 			<fx:Object label="Item 1"/>
@@ -72,13 +81,10 @@ limitations under the License.
 			<fx:Object label="Item 22"/>
 			<fx:Object label="Item 23"/>
 		</s:ArrayList>
-	</s:List>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The List control displays a vertical list of items. Its functionality is similar to that of the SELECT form element in HTML. If there are more items than can be displayed at once, it can display a vertical scroll bar so the user can access all items in the list. An optional horizontal scroll bar lets the user view items when the full width of the list items is unlikely to fit. The user can select one or more items from the list, depending on the value of the allowMultipleSelection property.
-				&#xd;&#xd;Note: The Spark list-based controls (the Spark ListBase class and its subclasses such as ButtonBar, ComboBox, DropDownList, List, and TabBar) do not support the BasicLayout class as the value of the layout property. Do not use BasicLayout with the Spark list-based controls. When a layout is specified, the layout's typicalLayoutElement property should not be set; it's automatically set to an item renderer created with the List's typicalItem.
-				
-				&#xd;&#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>
-	
+	</s:List>	
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" text="The List control displays a vertical list of items. Its functionality is similar to that of the SELECT form element in HTML. If there are more items than can be displayed at once, it can display a vertical scroll bar so the user can access all items in the list. An optional horizontal scroll bar lets the user view items when the full width of the list items is unlikely to fit. The user can select one or more items from the list, depending on the value of the allowMultipleSelection property.
+				&#xd;&#xd;Note: The Spark list-based controls (the Spark ListBase class and its subclasses such as ButtonBar, ComboBox, DropDownList, List, and TabBar) do not support the BasicLayout class as the value of the layout property. Do not use BasicLayout with the Spark list-based controls. When a layout is specified, the layout's typicalLayoutElement property should not be set; it's automatically set to an item renderer created with the List's typicalItem.				
+				&#xd;&#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
 	</s:actionContent>

@@ -18,11 +18,12 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="CheckBox">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="CheckBox">
 	
 	<fx:Script>
 		<![CDATA[
-			import spark.skins.mobile.TextAreaSkin;
+			
 			protected function checkboxHandler(event:Event):void
 			{
 				label.text = event.target.label + " toggled: " + event.target.selected as String;
@@ -30,40 +31,45 @@ limitations under the License.
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				if(currentState == "DemoState"){
+				if(currentState == "DemoState")
+				{
 					currentState = "InfoState";				
-				}else if(currentState == "InfoState"){
+				}
+				else if(currentState == "InfoState")
+				{
 					currentState = "DemoState";
 				}
 			}
 		]]>
-	</fx:Script>
-	
+	</fx:Script>	
 	<s:states>
 		<s:State name="DemoState"/>
 		<s:State name="InfoState"/>
-	</s:states>
-	
+	</s:states>	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
-	</fx:Declarations>
-	
-	<s:VGroup includeIn="DemoState" horizontalCenter="0" y="20">
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>	
+	<s:VGroup includeIn="DemoState" horizontalAlign="center" width="100%" height="100%" verticalAlign="middle">
 		<s:CheckBox change="checkboxHandler(event)" label="CheckBox 1" />
 		<s:CheckBox change="checkboxHandler(event)" label="CheckBox 2" />
 		<s:CheckBox change="checkboxHandler(event)" label="CheckBox 3" />
-	</s:VGroup>
-	
-	<s:Label includeIn="DemoState" id="label" horizontalCenter="0" bottom="20" textAlign="center"/>
-	
-	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="The CheckBox component consists of an optional label and a small box that can contain a check mark or not.
-				&#xd; &#xd;When a user clicks a CheckBox component or its associated text, the CheckBox component sets its selected property to true for checked, and to false for unchecked.
-				
+		<s:Spacer height="10"/>
+		<s:Label id="label" horizontalCenter="0" bottom="20" textAlign="center"/>
+	</s:VGroup>	
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The CheckBox component consists of an optional label and a small box that can contain a check mark or not.
+				&#xd; &#xd;When a user clicks a CheckBox component or its associated text, the CheckBox component sets its selected property to true for checked, and to false for unchecked.		
 				&#xd; &#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>
-	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
-	</s:actionContent>
-	
+	</s:actionContent>	
 </s:View>

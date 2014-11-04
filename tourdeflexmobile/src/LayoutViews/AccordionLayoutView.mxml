@@ -18,40 +18,84 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="AccordionLayout" xmlns:ns="http://flex.apache.org/experimental/ns">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="AccordionLayout" 
+		xmlns:ns="http://flex.apache.org/experimental/ns" xmlns:renderers="renderers.*">
 	
 	<fx:Script>
 		<![CDATA[
 			import spark.primitives.BitmapImage;
+			import spark.skins.spark.DefaultComplexItemRenderer;
+			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				var random:Number = Math.ceil(Math.random()*3);
-				
-				var bitmapImage:BitmapImage = new BitmapImage();
-				bitmapImage.width =  150;
-				bitmapImage.height = bitmapImage.width;
-				bitmapImage.source = "assets/images/box"+random+".png";
-				group.addElement(bitmapImage);
-				
-				group.verticalScrollPosition = group.contentHeight;
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
 			}
 		]]>
 	</fx:Script>
-	
-	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1.png')" 
+								source240dpi="@Embed('assets/icons/240/1.png')" 
+								source320dpi="@Embed('assets/icons/320/1.png')"
+								source480dpi="@Embed('assets/icons/480/1.png" id="box1"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/2.png')" 
+								source240dpi="@Embed('assets/icons/240/2.png')" 
+								source320dpi="@Embed('assets/icons/320/2.png')"
+								source480dpi="@Embed('assets/icons/480/2.png" id="box2"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/3.png')" 
+								source240dpi="@Embed('assets/icons/240/3.png')" 
+								source320dpi="@Embed('assets/icons/320/3.png')"
+								source480dpi="@Embed('assets/icons/480/3.png" id="box3"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/about.png')" id="aboutIcon"  
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')"
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/dock.png')" id="demoIcon"
+								source240dpi="@Embed('assets/icons/240/dock.png')"  
+								source320dpi="@Embed('assets/icons/320/dock.png')"
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>
 	<s:actionContent>
-		<s:Button click="buttonHandler(event)">
-			<s:icon>
-				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/add.png')" source240dpi="@Embed('assets/icons/240/add.png')" source320dpi="@Embed('assets/icons/320/add.png')" />
-			</s:icon>
-		</s:Button>
-	</s:actionContent>
-			
-	<s:Scroller id="scroller" width="200" height="200" horizontalCenter="0" verticalCenter="0">
-		<s:Group id="group">
-			<s:layout>
-				<ns:AccordionLayout useVirtualLayout="true" />
-			</s:layout>
-		</s:Group>
-	</s:Scroller>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>	
+	
+	<s:List id="list" includeIn="DemoState" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" itemRenderer="spark.skins.spark.DefaultComplexItemRenderer" pageScrollingEnabled="true">
+		<s:layout>
+			<ns:AccordionLayout 
+				useScrollBarForNavigation="true" 
+				scrollBarDirection="horizontal" 
+				duration="500" 
+				direction="horizontal"/>
+		</s:layout>
+		<s:dataProvider>
+			<s:ArrayList>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+				<renderers:AccordionElement/>
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:List>
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="An AccordionLayout class arranges the layout elements in a vertical or horizontal sequence, with one of them at a time fully visible. 				
+				&#xd; &#xd;The position of the elements is determined by arranging them in a sequence, top to bottom or left to right depending on the value or duration.	
+				&#xd; &#xd;If the target of the layout implements ISelectable list, a ButtonBarBase can be set using the buttonBar property and the layout will connect the target and ButtonBarBase together so that the ButtonBarBase can be used to navigate through the elements.
+				"/>
 </s:View>

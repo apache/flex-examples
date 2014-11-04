@@ -18,40 +18,101 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="CoverFlowLayout" xmlns:ns="http://flex.apache.org/experimental/ns">
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="CoverFlowLayout" 
+		xmlns:ns="http://flex.apache.org/experimental/ns">
 	
 	<fx:Script>
 		<![CDATA[
 			import spark.primitives.BitmapImage;
+			
 			protected function buttonHandler(event:MouseEvent):void
 			{
-				var random:Number = Math.ceil(Math.random()*3);
-				
-				var bitmapImage:BitmapImage = new BitmapImage();
-				bitmapImage.width =  Math.ceil(Math.random()*150);
-				bitmapImage.height = bitmapImage.width;
-				bitmapImage.source = "assets/images/box"+random+".png";
-				group.addElement(bitmapImage);
-				
-				group.verticalScrollPosition = group.contentHeight;
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
 			}
 		]]>
 	</fx:Script>
-	
-	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1.png')" 
+								source240dpi="@Embed('assets/icons/240/1.png')" 
+								source320dpi="@Embed('assets/icons/320/1.png')"
+								source480dpi="@Embed('assets/icons/480/1.png" id="box1"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/2.png')" 
+								source240dpi="@Embed('assets/icons/240/2.png')" 
+								source320dpi="@Embed('assets/icons/320/2.png')"
+								source480dpi="@Embed('assets/icons/480/2.png" id="box2"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/3.png')" 
+								source240dpi="@Embed('assets/icons/240/3.png')" 
+								source320dpi="@Embed('assets/icons/320/3.png')"
+								source480dpi="@Embed('assets/icons/480/3.png" id="box3"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/about.png')" id="aboutIcon"  
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')"
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/dock.png')" id="demoIcon"
+								source240dpi="@Embed('assets/icons/240/dock.png')"  
+								source320dpi="@Embed('assets/icons/320/dock.png')"
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>	
 	<s:actionContent>
-		<s:Button click="buttonHandler(event)">
-			<s:icon>
-				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/add.png')" source240dpi="@Embed('assets/icons/240/add.png')" source320dpi="@Embed('assets/icons/320/add.png')" />
-			</s:icon>
-		</s:Button>
-	</s:actionContent>
-			
-	<s:Scroller id="scroller" width="100%" height="100%">
-		<s:Group id="group">
-			<s:layout>
-				<ns:CoverflowLayout verticalAlign="middle" duration="500" useVirtualLayout="true" />
-			</s:layout>
-		</s:Group>
-	</s:Scroller>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>		
+	<s:List id="list" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"
+			pageScrollingEnabled="true" includeIn="DemoState">
+		<s:layout>
+			<ns:CoverflowLayout verticalAlign="middle" 
+								duration="200"  
+								id="coverFlowLayoutID" 
+								useScrollBarForNavigation="true"
+								scrollBarDirection="horizontal"
+								selectedHorizontalDisplacement="100" 
+								horizontalDisplacement="100" 
+								selectedVerticalDisplacement="0"
+								verticalDisplacement="0" 
+								horizontalScrollPosition="320"
+								fieldOfView="40" 
+								focalLength="660"
+								maximumZ="50"/>
+		</s:layout>
+		<s:dataProvider>
+			<s:ArrayList>
+				<s:BitmapImage source="{box1}" />
+				<s:BitmapImage source="{box2}" />
+				<s:BitmapImage source="{box3}" />
+				<s:BitmapImage source="{box1}" />
+				<s:BitmapImage source="{box2}" />
+				<s:BitmapImage source="{box3}" />
+				<s:BitmapImage source="{box1}" />
+				<s:BitmapImage source="{box2}" />
+				<s:BitmapImage source="{box3}" />
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:List>
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="A CoverflowLayout class arranges the layout elements in a linear along with unselected items having a different z and rotation.
+				
+				&#xd; &#xd;The horizontal position of the elements is determined by the combined result of horizontalAlign, horizontalDisplacement, horizontalAlignOffset or horizontalAlignOffsetPercent, elementHorizontalAlign and selectedHorizontalDisplacement.
+				
+				&#xd; &#xd;The horizontal position of the elements is determined by the combined result of verticalAlign, verticalDisplacement, verticalAlignOffset or verticalAlignOffsetPercent, elementVerticalAlign and selectedVerticalDisplacement.
+				
+				&#xd; &#xd;The z position of unselected elements is determined by the maximumZ property.
+				
+				&#xd; &#xd;The rotation of the elements is determined by the rotationX, rotationY and rotationZ properties.
+				
+				&#xd; &#xd;The color of unselected elements is determined by the depthColor and depthColorAlpha properties.
+				
+				&#xd; &#xd;If depthColor has a value of -1, no color transform is applied.
+				
+				&#xd; &#xd;The number elements or elements rendered is determined by the numUnselectedElements property. If numUnselectedElements has a value of -1 and useVirtualLayout has a value of true, only the elements that fit within the bound of the target are rendered, If numUnselectedElements has a value of -1 and useVirtualLayout has a value of false, all elements are rendered."/>
 </s:View>
