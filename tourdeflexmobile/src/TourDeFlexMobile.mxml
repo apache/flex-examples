@@ -20,18 +20,14 @@ limitations under the License.
 
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   applicationDPI="160" frameRate="60"
+			   applicationDPI="160" frameRate="60" currentState="closed"
 			   applicationComplete="init(event)"
 			   splashScreenImage="@Embed('assets/images/poweredby.png')" 
 			   splashScreenScaleMode="letterbox">
 	<fx:Style source="styles.css"/>	
 	<fx:Script>
 		<![CDATA[
-			
-			import flash.events.Event;
 			import flash.events.MouseEvent;
-			import flash.events.TimerEvent;
-			import flash.utils.Timer;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -41,6 +37,7 @@ limitations under the License.
 			import AIRViews.AccelerometerView;
 			import AIRViews.CameraView;
 			import AIRViews.GeolocationView;
+			import AIRViews.NativeAppView;
 			import AIRViews.SQLiteView;
 			
 			import LayoutViews.AccordionLayoutView;
@@ -48,10 +45,10 @@ limitations under the License.
 			import LayoutViews.CoverFlowLayoutView;
 			import LayoutViews.HorizontalLayoutView;
 			import LayoutViews.RolodexLayoutView;
+			import LayoutViews.StackLayoutView;
 			import LayoutViews.TileLayoutView;
 			import LayoutViews.TimeMachineLayoutView;
 			import LayoutViews.VerticalLayoutView;
-			import LayoutViews.StackLayoutView;
 			
 			import UIViews.ButtonBarView;
 			import UIViews.CalloutButtonView;
@@ -65,14 +62,16 @@ limitations under the License.
 			import UIViews.TextInputView;
 			import UIViews.ToggleSwitchView;
 			
+			import flashx.textLayout.container.ScrollPolicy;
+			
 			import views.HttpServiceView;
 			
-			private var isOpen:Boolean;	
-			
+			private var prevX:int = 0; 
+			private var curX:int = 0; 
 			
 			protected function init(event:FlexEvent):void
 			{
-				stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 			
+				stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown); 
 				lateralMenu.x = lateralMenu.width * -1;
 			}
 			
@@ -84,98 +83,91 @@ limitations under the License.
 			
 			protected function mouseDown(event:MouseEvent):void 
 			{			
-				//	if (!navigator.mouseEnabled && mouseX < 210 && mouseY > 45 && mouseY < navigator.height - 50) 
-				//	{								
-				//		lateralMenu.addEventListener(MouseEvent.MOUSE_UP, mouseUp);					
-				//		lateralMenu.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);			
-				//	}	
-				if (navigator.mouseEnabled && mouseX < 20 && mouseY > 45 && mouseY < navigator.height - 50)
+				if (currentState == "open" && mouseX < 210 && mouseY > 45) 
+				{								
+					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);					
+					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);			
+				}	
+				if (currentState == "closed" && mouseX < 20 && mouseY > 45 && mouseY < navigator.height - 50)
 				{
 					stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpIn);	
 					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
-				}
+				}	
+				prevX = event.stageX;
 			} 	
 			
-			/*	protected function mouseMove(event:MouseEvent):void 
-			{				
-			navigator.mouseEnabled = false;		
-			var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
-			lateralMenu.startDrag(false, myRectangle );
-			trace(lateralMenu.x)
-			//lateralMenu.addEventListener(MouseEvent.CLICK,suppressClick,true,9999,true);
-			
+			protected function mouseMove(event:MouseEvent):void 
+			{						
+				curX = stage.mouseX;
+				if (prevX - curX > 20) 
+				{
+					lateralMenu.mouseChildren = false;
+					componentsList.setStyle('verticalScrollPolicy', ScrollPolicy.OFF);					
+					var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
+					lateralMenu.startDrag(false, myRectangle );
+				}		
 			} 
 			
 			protected function mouseUp(event:MouseEvent):void 
 			{		
-			
-			if (lateralMenu.x < -65) 
-			{
-			lateralMenu.stopDrag();
-			lateralMenu.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
-			lateralMenu.removeEventListener(MouseEvent.MOUSE_DOWN, mouseMove);					
-			moveOut.play();
-			isOpen == false;					
+				if (lateralMenu.x <= -65) 
+				{		
+					moveOut.play();		
+					currentState = "closed";	
+					obfuscationGroup.visible = false;
+				}
+				if (lateralMenu.x > -65) 
+				{	
+					moveIn.play();
+					currentState = "open";			
+				}
+				lateralMenu.stopDrag();	
+				lateralMenu.mouseChildren = true;
+				componentsList.setStyle('verticalScrollPolicy', ScrollPolicy.ON);	
+				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);	
 			}
-			if (lateralMenu.x > -65) 
-			{
-			lateralMenu.stopDrag();
-			moveIn.play();
-			isOpen == true;					
-			}
-			lateralMenu.stopDrag();	
-			}	*/	
-			
-			
 			
 			protected function mouseDownIn(event:MouseEvent):void 
 			{				
 				//define area for lateralMenu to travel
 				var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
-				lateralMenu.startDrag(false, myRectangle );	
+				lateralMenu.startDrag(false, myRectangle);	
 				obfuscationGroup.visible = true;
 				obfuscationLayer.alpha = (lateralMenu.x + 216) * .47 / 200	
-				trace(obfuscationLayer.alpha);
 			} 
 			
 			protected function mouseUpIn(event:MouseEvent):void 
-			{		
-				if (lateralMenu.x > -115) 
+			{					
+				if (lateralMenu.x >= -115) 
 				{
-					lateralMenu.stopDrag();
-					stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpIn);
-					stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
 					moveIn.play();
-					isOpen == true;	
-					currentState = "closed";
-				}
-				if (lateralMenu.x < -115) 
-				{
-					lateralMenu.stopDrag();
-					moveOut.play();
-					isOpen == false;	
-					obfuscationGroup.visible = false;
 					currentState = "open";
 				}
+				if (lateralMenu.x < -115) 
+				{					
+					moveOut.play();
+					currentState = "closed";
+					obfuscationGroup.visible = false;				
+				}
 				lateralMenu.stopDrag();
+				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpIn);
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
 			}
 			
 			protected function menuHandler():void
-			{
-				
+			{				
 				if(lateralMenu.x == 0)
 				{
 					obfuscationGroup.visible = false;
 					parallelOut.play();			
-					isOpen = false;
-					currentState = "open";
+					currentState = "closed";
 				} 
 				else if(lateralMenu.x == -215)
 				{
 					obfuscationGroup.visible = true;
 					parallelIn.play();		
-					isOpen = true;
-					currentState = "closed";
+					currentState = "open";
 				}
 			}
 			
@@ -194,12 +186,12 @@ limitations under the License.
 			<s:Fade id="fadeOut" target="{obfuscationLayer}" alphaFrom=".5" alphaTo="0" duration="300"/>
 			<s:Move id="moveOut" duration="300" target="{lateralMenu}" xTo="-215"/>
 		</s:Parallel>
-		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon.png')" id="iconOpen" 
+		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon.png')" id="iconClose" 
 								source480dpi="@Embed('assets/icons/480/icon.png')" 
 								source320dpi="@Embed('assets/icons/320/icon.png')" 
 								source240dpi="@Embed('assets/icons/240/icon.png')"
 								source160dpi="@Embed('assets/icons/160/icon.png')"/>
-		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon1.png')" id="iconClose" 
+		<s:MultiDPIBitmapSource source640dpi="@Embed('assets/icons/640/icon1.png')" id="iconOpen" 
 								source480dpi="@Embed('assets/icons/480/icon1.png')" 
 								source320dpi="@Embed('assets/icons/320/icon1.png')" 
 								source240dpi="@Embed('assets/icons/240/icon1.png')"
@@ -251,12 +243,12 @@ limitations under the License.
 				<fx:Object label="Accelerometer" type="view" view="{AccelerometerView}"/>
 				<!--fx:Object label="Camera" type="view" view="{CameraView}"/-->
 				<fx:Object label="Geolocation" type="view" view="{GeolocationView}"/>
+				<fx:Object label="Native App Integration" type="view" view="{NativeAppView}"/>
 				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
 				
 				<fx:Object label="DATA ACCESS" type="separator"/>			
 				<fx:Object label="HTTPService" type="view" view="{HttpServiceView}"/>
 			</s:ArrayList>
 		</s:List>
-	</s:Group>
-	
+	</s:Group>	
 </s:Application>
