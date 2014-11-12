@@ -47,15 +47,15 @@ limitations under the License.
 		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1.png')" 
 								source240dpi="@Embed('assets/icons/240/1.png')" 
 								source320dpi="@Embed('assets/icons/320/1.png')"
-								source480dpi="@Embed('assets/icons/480/1.png" id="box1"/>
+								source480dpi="@Embed('assets/icons/480/1.png')" id="box1"/>
 		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/2.png')" 
 								source240dpi="@Embed('assets/icons/240/2.png')" 
 								source320dpi="@Embed('assets/icons/320/2.png')"
-								source480dpi="@Embed('assets/icons/480/2.png" id="box2"/>
+								source480dpi="@Embed('assets/icons/480/2.png')" id="box2"/>
 		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/3.png')" 
 								source240dpi="@Embed('assets/icons/240/3.png')" 
 								source320dpi="@Embed('assets/icons/320/3.png')"
-								source480dpi="@Embed('assets/icons/480/3.png" id="box3"/>
+								source480dpi="@Embed('assets/icons/480/3.png')" id="box3"/>
 		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/about.png')" id="aboutIcon"  
 								source240dpi="@Embed('assets/icons/240/about.png')" 
 								source320dpi="@Embed('assets/icons/320/about.png')"
