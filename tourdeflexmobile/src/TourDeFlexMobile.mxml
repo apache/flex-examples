@@ -143,8 +143,6 @@ limitations under the License.
 				if (lateralMenu.x > -115) 
 				{
 					lateralMenu.stopDrag();
-					stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpIn);
-					stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
 					moveIn.play();
 					isOpen == true;	
 					currentState = "closed";
@@ -158,6 +156,8 @@ limitations under the License.
 					currentState = "open";
 				}
 				lateralMenu.stopDrag();
+				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpIn);
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseDownIn);
 			}
 			
 			protected function menuHandler():void
