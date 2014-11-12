@@ -27,6 +27,7 @@ limitations under the License.
 	<fx:Style source="styles.css"/>	
 	<fx:Script>
 		<![CDATA[
+			import AIRViews.NativeAppView;
 			
 			import flash.events.Event;
 			import flash.events.MouseEvent;
@@ -41,6 +42,7 @@ limitations under the License.
 			import AIRViews.AccelerometerView;
 			import AIRViews.CameraView;
 			import AIRViews.GeolocationView;
+			import AIRViews.NativeAppView;
 			import AIRViews.SQLiteView;
 			
 			import LayoutViews.AccordionLayoutView;
@@ -96,34 +98,33 @@ limitations under the License.
 				}
 			} 	
 			
-			/*	protected function mouseMove(event:MouseEvent):void 
+			/*protected function mouseMove(event:MouseEvent):void 
 			{				
-			navigator.mouseEnabled = false;		
-			var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
-			lateralMenu.startDrag(false, myRectangle );
-			trace(lateralMenu.x)
-			//lateralMenu.addEventListener(MouseEvent.CLICK,suppressClick,true,9999,true);
-			
+				navigator.mouseEnabled = false;		
+				var myRectangle:Rectangle = new Rectangle(-215, 42, 215, 0);
+				lateralMenu.startDrag(false, myRectangle );
+				trace(lateralMenu.x)
+				//lateralMenu.addEventListener(MouseEvent.CLICK,suppressClick,true,9999,true);
 			} 
 			
 			protected function mouseUp(event:MouseEvent):void 
 			{		
+				if (lateralMenu.x < -65) 
+				{
+					lateralMenu.stopDrag();
 			
-			if (lateralMenu.x < -65) 
-			{
-			lateralMenu.stopDrag();
-			lateralMenu.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
-			lateralMenu.removeEventListener(MouseEvent.MOUSE_DOWN, mouseMove);					
-			moveOut.play();
-			isOpen == false;					
-			}
-			if (lateralMenu.x > -65) 
-			{
-			lateralMenu.stopDrag();
-			moveIn.play();
-			isOpen == true;					
-			}
-			lateralMenu.stopDrag();	
+					moveOut.play();
+					isOpen == false;					
+				}
+				if (lateralMenu.x > -65) 
+				{
+					lateralMenu.stopDrag();
+					moveIn.play();
+					isOpen == true;					
+				}
+				lateralMenu.stopDrag();	
+				lateralMenu.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);				
+				lateralMenu.removeEventListener(MouseEvent.MOUSE_DOWN, mouseMove);		
 			}	*/	
 			
 			
@@ -251,6 +252,7 @@ limitations under the License.
 				<fx:Object label="Accelerometer" type="view" view="{AccelerometerView}"/>
 				<!--fx:Object label="Camera" type="view" view="{CameraView}"/-->
 				<fx:Object label="Geolocation" type="view" view="{GeolocationView}"/>
+				<fx:Object label="Native App Integration" type="view" view="{NativeAppView}"/>
 				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
 				
 				<fx:Object label="DATA ACCESS" type="separator"/>			
