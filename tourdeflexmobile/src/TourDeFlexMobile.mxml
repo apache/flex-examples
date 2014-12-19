@@ -50,6 +50,7 @@ limitations under the License.
 			import LayoutViews.TimeMachineLayoutView;
 			import LayoutViews.VerticalLayoutView;
 			
+			import UIViews.ActionBarView;
 			import UIViews.ButtonBarView;
 			import UIViews.CalloutButtonView;
 			import UIViews.CheckboxView;
@@ -216,6 +217,7 @@ limitations under the License.
 				change="changeHandler(event)" contentBackgroundColor="#eeeeee" downColor="#e0e0e0" selectionColor="#33B5E5">
 			<s:ArrayList>
 				<fx:Object label="UI COMPONENTS" type="separator"/>			
+				<fx:Object label="ActionBar" type="view" view="{ActionBarView}"/>
 				<fx:Object label="ButtonBar" type="view" view="{ButtonBarView}"/>
 				<fx:Object label="CalloutButton" type="view" view="{CalloutButtonView}"/>
 				<fx:Object label="CheckBox" type="view" view="{CheckboxView}"/>
