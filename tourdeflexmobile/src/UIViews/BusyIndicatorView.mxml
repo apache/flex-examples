@@ -18,7 +18,7 @@ limitations under the License.
 
 -->
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="ActionBar" show="view1_showHandler(event)">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="BusyIndicator" >
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -33,11 +33,6 @@ limitations under the License.
 				{
 					currentState = "DemoState";
 				}
-			}
-			
-			protected function view1_showHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
 			}
 			
 		]]>
@@ -63,14 +58,12 @@ limitations under the License.
 		<s:Spacer height="10"/>
 		<s:Label id="label" horizontalCenter="0" textAlign="center"/>
 	</s:VGroup>	
-	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" text="The ActionBar class defines a component that includes title, navigation, and action content groups. The ActionBar control provides a standard area for navigation and action controls. It lets you define global controls that can be used from anywhere in the application, or controls specific to a view.
-				The ActionBar control defines three distinct areas:
-				&#xd; &#xd;Navigation area
-				&#xd; &#xd;Contains components that let the user navigate the section. For example, you can define a home button in the navigation area. Use the navigationContent property to define the components that appear in the navigation area. Use the navigationLayout property to define the layout of the navigation area.
-				&#xd; &#xd;Title area
-				&#xd; &#xd;Contains either a String containing title text, or components. If you specify components, you cannot specify a title String. Use the title property to specify the String to appear in the title area. Use the titleContent property to define the components that appear in the title area. Use the titleLayout property to define the layout of the title area. If you specify a value for the titleContent property, the ActionBar skin ignores the title property.
-				&#xd; &#xd;Action area
-				&#xd; &#xd;Contains components that define actions the user can take in a view. For example, you might define a search or refresh button as part of the action area. Use the actionContent property to define the components that appear in the action area. Use the actionLayout property to define the layout of the action area."/>	
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The BusyIndicator defines a component to display when a long-running operation is in progress. 
+				&#xd; &#xd;For Web, Desktop and iOS, a spinner with twelve spoke is drawn. The color of the spokes is controlled by the value of the symbolColor style.
+				&#xd; &#xd;For Android, a circle is drawn that rotates.
+				&#xd; &#xd;The transparency of this component can be modified using the alpha property, but the alpha value of each spoke cannot be modified.
+				"/>	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
 	</s:actionContent>
