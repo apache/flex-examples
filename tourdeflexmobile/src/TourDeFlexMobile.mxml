@@ -51,6 +51,7 @@ limitations under the License.
 			import LayoutViews.VerticalLayoutView;
 			
 			import UIViews.ActionBarView;
+			import UIViews.BusyIndicatorView;
 			import UIViews.ButtonBarView;
 			import UIViews.CalloutButtonView;
 			import UIViews.CheckboxView;
@@ -218,6 +219,7 @@ limitations under the License.
 			<s:ArrayList>
 				<fx:Object label="UI COMPONENTS" type="separator"/>			
 				<fx:Object label="ActionBar" type="view" view="{ActionBarView}"/>
+				<fx:Object label="BusyIndicator" type="view" view="{BusyIndicatorView}"/>
 				<fx:Object label="ButtonBar" type="view" view="{ButtonBarView}"/>
 				<fx:Object label="CalloutButton" type="view" view="{CalloutButtonView}"/>
 				<fx:Object label="CheckBox" type="view" view="{CheckboxView}"/>
