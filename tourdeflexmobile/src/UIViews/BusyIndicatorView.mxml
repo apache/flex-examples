@@ -21,7 +21,6 @@ limitations under the License.
 		xmlns:s="library://ns.adobe.com/flex/spark" title="BusyIndicator" >
 	<fx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
 			
 			protected function buttonHandler(event:MouseEvent):void
 			{
