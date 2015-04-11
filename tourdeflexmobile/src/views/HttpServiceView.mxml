@@ -74,7 +74,7 @@ limitations under the License.
 	<s:Button label="Load" y="10" includeIn="DemoState" width="60" height="40" right="5" click="loadRSS()"/>
 	
 	<s:List id="itemsList" labelField="title" includeIn="DemoState" width="100%" bottom="0" top="60"/>
-	<s:BusyIndicator id="busyIndicator" verticalCenter="0" horizontalCenter="0" width="20" height="20" visible="false"/>
+	<s:BusyIndicator id="busyIndicator" verticalCenter="0" horizontalCenter="0" visible="false"/>
 	<s:TextArea includeIn="InfoState" left="10" right="10" top="10" bottom="10" editable="false" selectable="false" 
 				text="You use the HTTPService tag to represent an HTTPService object in an MXML file. When you call the HTTPService object's send() method, it makes an HTTP request to the specified URL, and an HTTP response is returned. Optionally, you can pass parameters to the specified URL. When you do not go through the server-based proxy service, you can use only HTTP GET or POST methods. However, when you set the useProxy property to true and you use the server-based proxy service, you can also use the HTTP HEAD, OPTIONS, TRACE, and DELETE methods.
 				&#xd; &#xd;Note: Due to a software limitation, HTTPService does not generate user-friendly error messages when using GET."/>	

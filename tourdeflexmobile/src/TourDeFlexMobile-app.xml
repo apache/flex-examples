@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/16.0">
+<application xmlns="http://ns.adobe.com/air/application/17.0">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
@@ -15,7 +15,7 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>org.apache.flex.tourdeflex.mobile</id>
+	<id>com.bigosmallm.flex.tourdeflex.mobile</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>TourDeFlexMobile</filename>
@@ -111,7 +111,7 @@
 
 		<!-- Display Resolution for the app (either "standard" or "high"). Optional, OSX-only. Default "standard" -->
 		<!-- <requestedDisplayResolution></requestedDisplayResolution> -->
-	<autoOrients>true</autoOrients>
+	<autoOrients>false</autoOrients>
         <fullScreen>false</fullScreen>
         <visible>true</visible>
         <softKeyboardBehavior>none</softKeyboardBehavior>

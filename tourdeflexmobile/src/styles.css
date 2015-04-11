@@ -3,15 +3,15 @@
 @namespace supportClasses "spark.components.supportClasses.*";
 @namespace ns "http://flex.apache.org/experimental/ns";
 
-global
+/*global
 {
 	fontFamily: RobotoRegular;
 	fontSize: 24;
 	color: #000000;
-}
+}*/
 
 
-TextArea
+/*TextArea
 {
 	skinClass: ClassReference("spark.skins.android4.TextAreaSkin");
 	contentBackgroundAlpha: 0;
@@ -22,7 +22,7 @@ TextArea
 	selectionHighlighting: "never";
 	focusEnabled:"false";
 	focusThickness: 0;
-}
+}*/
 
 ns|MobileGrid
 {
