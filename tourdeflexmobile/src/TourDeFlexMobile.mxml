@@ -24,18 +24,17 @@ limitations under the License.
 			   applicationComplete="init(event)"
 			   splashScreenImage="@Embed('assets/images/poweredby.png')" 
 			   splashScreenScaleMode="letterbox">
-	<fx:Style source="styles.css"/>	
+<!--	<fx:Style source="styles.css"/>-->	
 	<fx:Script>
 		<![CDATA[
 			import flash.events.MouseEvent;
 			
-			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
 			import AIRViews.AccelerometerView;
-			import AIRViews.CameraView;
+			import AIRViews.CameraUIView;
 			import AIRViews.GeolocationView;
 			import AIRViews.NativeAppView;
 			import AIRViews.SQLiteView;
@@ -247,6 +246,7 @@ limitations under the License.
 				<fx:Object label="Accelerometer" type="view" view="{AccelerometerView}"/>
 				<!--fx:Object label="Camera" type="view" view="{CameraView}"/-->
 				<fx:Object label="Geolocation" type="view" view="{GeolocationView}"/>
+				<!--<fx:Object label="CameraUI" type="view" view="{CameraUIView}"/>-->
 				<fx:Object label="Native App Integration" type="view" view="{NativeAppView}"/>
 				<fx:Object label="SQLite" type="view" view="{SQLiteView}"/>
 				
