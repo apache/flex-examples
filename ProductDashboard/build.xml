@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<!--
+
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<project name="ProjectDashboard" basedir="." default="main">
+    <property environment="env"/>
+    <property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+    <property name="FLEXJS_HOME" value="${env.FLEX_HOME}" />
+    <property name="FALCON_HOME" value="${env.FLEX_HOME}" />
+    <property name="FALCONJX_HOME" value="${env.FLEX_HOME}/js" />
+    
+    <property name="theme_arg" value="-theme=${FLEX_HOME}/frameworks/libs/flat.swc" />
+    <property name="example" value="ProjectDashboard" />
+    
+    <path id="lib.path">
+      <fileset dir="${FALCON_HOME}/lib" includes="falcon-flexTasks.jar"/>
+    </path>
+    
+    <target name="clean" >
+        <delete dir="${basedir}/bin-debug" failonerror="false" />
+        <delete dir="${basedir}/bin" failonerror="false" />
+    </target>
+    
+    <target name="main" depends="compile, compilejs, get-data" />
+    
+    <target name="compile" description="Compiles ${example}">
+        <echo message="Compiling ${example}.swf"/>
+        <echo message="FLEX_HOME: ${FLEX_HOME}"/>
+
+        <!-- Load the <compc> task. We can't do this at the <project> level -->
+        <!-- because targets that run before flexTasks.jar gets built would fail. -->
+        <taskdef resource="flexTasks.tasks" classpathref="lib.path"/>
+        <!-- this is a dummy var placeholder in case some example needs to define a theme
+            then they would set theme_arg=-theme=<path to theme> -->
+        <property name="theme_arg" value="-define=CONFIG::theme,false" />
+        <mxmlc fork="true"
+               file="${basedir}/src/${example}.mxml"
+               output="${basedir}/bin-debug/${example}.swf">
+            <!--<jvmarg line="${mxmlc.jvm.args}"/>-->
+            <arg value="+flexlib=${basedir}/frameworks" />
+            <arg value="-debug" />
+            <arg value="${theme_arg}" />
+            <arg value="-compiler.mxml.children-as-data" />
+            <arg value="-compiler.binding-value-change-event=org.apache.flex.events.ValueChangeEvent" />
+            <arg value="-compiler.binding-value-change-event-kind=org.apache.flex.events.ValueChangeEvent" />
+            <arg value="-compiler.binding-value-change-event-type=valueChange" />
+            <arg value="+playerglobal.version=${playerglobal.version}" />
+            <arg value="+env.PLAYERGLOBAL_HOME=${env.PLAYERGLOBAL_HOME}" />
+        </mxmlc>
+        
+        <html-wrapper 
+            height="100%" 
+            width="100%"
+            bgcolor="#ffffff"
+            name="${example}"
+            versionmajor="11"
+            versionminor="1"
+            versionrevision="0" 
+            output="${basedir}/bin-debug"/> 
+ 
+        <copy todir="${basedir}/bin-debug">
+            <fileset dir="${basedir}/src">
+                <include name="**/*.png" />
+                <include name="**/*.jpg" />
+            </fileset>
+        </copy>
+        <copy todir="${basedir}/bin-debug/fonts">
+            <fileset dir="${FLEX_HOME}/frameworks/fonts">
+                <include name="**/*.swf" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="compilejs" description="Cross-compiles ${example}" unless="no.js">
+        <echo message="Compiling ${example}.js"/>
+        <echo message="FLEX_HOME: ${FLEX_HOME}"/>
+        <echo message="FALCONJX_HOME: ${FALCONJX_HOME}"/>
+        <property name="theme_arg" value="-define=CONFIG::theme,false" />
+
+        <java jar="${FALCONJX_HOME}/lib/mxmlc.jar" resultProperty="errorCode"
+            fork="true">
+            <!--<jvmarg line="${mxmlc.jvm.args}"/>-->
+            <jvmarg line="-Dflexlib=${FLEXJS_HOME}/frameworks}"/>
+            <arg value="+flexlib=${FLEXJS_HOME}/frameworks" />
+            <arg value="-debug" />
+            <arg value="${theme_arg}" />
+            <arg value="-compiler.mxml.children-as-data" />
+            <arg value="-compiler.binding-value-change-event=org.apache.flex.events.ValueChangeEvent" />
+            <arg value="-compiler.binding-value-change-event-kind=org.apache.flex.events.ValueChangeEvent" />
+            <arg value="-compiler.binding-value-change-event-type=valueChange" />
+            <arg value="+playerglobal.version=${playerglobal.version}" />
+            <arg value="+env.PLAYERGLOBAL_HOME=${env.PLAYERGLOBAL_HOME}" />
+            <arg value="-js-output-type=FLEXJS" />
+            <arg value="-sdk-js-lib=${FLEXJS_HOME}/frameworks/js/FlexJS/libs" />
+            <arg value="${basedir}/src/${example}.mxml" />
+        </java>
+        <fail>
+			<condition>
+				<not>
+					<or>
+						<equals arg1="${errorCode}" arg2="0" />
+						<equals arg1="${errorCode}" arg2="2" />
+					</or>
+				</not>
+			</condition>
+		</fail>
+    </target>
+
+
+    <macrodef name="html-wrapper">
+        <attribute name="width"/>
+        <attribute name="height"/>
+        <attribute name="bgcolor"/>
+        <attribute name="name"/>
+        <attribute name="versionmajor"/>
+        <attribute name="versionminor"/>
+        <attribute name="versionrevision"/>
+        <attribute name="output"/>
+            <sequential>
+                <copy toFile="@{output}/@{name}.html" 
+                    file="${FLEXJS_HOME}/templates/swfobject/index.template.html" />
+                <copy toDir="@{output}/history">
+                    <fileset dir="${FLEXJS_HOME}/templates/swfobject/history">
+                        <include name="**"/>
+                    </fileset>
+                </copy>
+                <copy toDir="@{output}">
+                    <fileset dir="${FLEXJS_HOME}/templates/swfobject">
+                        <include name="*"/>
+                        <exclude name="index.template.html"/>
+                    </fileset>
+                </copy>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${title}"
+                        value="@{name}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${bgcolor}"
+                        value="@{bgcolor}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${useBrowserHistory}"
+                        value="--"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${version_major}"
+                        value="@{versionmajor}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${version_minor}"
+                        value="@{versionminor}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${version_revision}"
+                        value="@{versionrevision}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${expressInstallSwf}"
+                        value="expressInstall.swf"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${expressInstallSwf}"
+                        value="expressInstall.swf"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${width}"
+                        value="@{width}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${height}"
+                        value="@{height}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${application}"
+                        value="@{name}"/>
+                </replace>
+                <replace file="@{output}/@{name}.html">
+                    <replacefilter
+                        token="$${swf}"
+                        value="@{name}"/>
+                </replace>
+        </sequential>
+    </macrodef>
+    
+    <target name="get-data" description="gets data from various sources, sort of like a proxy server">
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/flexjs" />
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/installer" />
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/flexunit" />
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/squiggly" />
+        <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/flexjs" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/installer" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/flexunit" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/squiggly" />
+        <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin-debug/issues.apache.org/jira/rest/api/2" />
+        <get src="http://archive.apache.org/dist/flex/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/index.html" />
+        <get src="http://archive.apache.org/dist/flex/flexjs/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/flexjs/index.html" />
+        <get src="http://archive.apache.org/dist/flex/installer/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/installer/index.html" />
+        <get src="http://archive.apache.org/dist/flex/BlazeDS/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/BlazeDS/index.html" />
+        <get src="http://archive.apache.org/dist/flex/flexunit/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/flexunit/index.html" />
+        <get src="http://archive.apache.org/dist/flex/squiggly/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/squiggly/index.html" />
+        <get src="http://archive.apache.org/dist/flex/tourdeflex/"
+            dest="${basedir}/bin-debug/archive.apache.org/dist/flex/tourdeflex/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/flexjs/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/flexjs/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/installer/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/installer/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/BlazeDS/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/BlazeDS/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/flexunit/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/flexunit/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/squiggly/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/squiggly/index.html" />
+        <get src="https://dist.apache.org/repos/dist/release/flex/tourdeflex/"
+            dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/tourdeflex/index.html" />
+        <get src="https://issues.apache.org/jira/rest/api/2/search?jql=project%20%3D%20FLEX%20AND%20status%20%3D%20open"
+            dest="${basedir}/bin-debug/issues.apache.org/jira/rest/api/2/search" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/flexjs" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/installer" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/flexunit" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/squiggly" />
+        <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/flexjs" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/installer" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/flexunit" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/squiggly" />
+        <mkdir dir="${basedir}/bin/js-debug/dist.apache.org/repos/dist/release/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin/js-debug/issues.apache.org/jira/rest/api/2" />
+        <copy todir="${basedir}/bin/js-debug">
+            <fileset dir="${basedir}/bin-debug">
+                <include name="**/index.html" />
+                <include name="issues.apache.org/jira/rest/api/2/search" />
+            </fileset>
+        </copy>
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/flexjs" />
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/installer" />
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/flexunit" />
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/squiggly" />
+        <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/flexjs" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/installer" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/BlazeDS" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/flexunit" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/squiggly" />
+        <mkdir dir="${basedir}/bin/js-release/dist.apache.org/repos/dist/release/flex/tourdeflex" />
+        <mkdir dir="${basedir}/bin/js-release/issues.apache.org/jira/rest/api/2" />
+        <copy todir="${basedir}/bin/js-release">
+            <fileset dir="${basedir}/bin-debug">
+                <include name="**/index.html" />
+                <include name="issues.apache.org/jira/rest/api/2/search" />
+            </fileset>
+        </copy>
+    </target>
+</project>

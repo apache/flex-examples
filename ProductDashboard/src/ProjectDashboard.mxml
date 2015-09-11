@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<js:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+                   xmlns:local="*"
+                   xmlns:js="library://ns.apache.org/flexjs/basic" 
+                   xmlns:models="models.*" 
+                   xmlns:controllers="controllers.*"
+                   initialize="configService.send()"
+                   >
+    <fx:Script>
+        <![CDATA[
+            import org.apache.flex.net.HTTPHeader;
+            private function fetchData():void
+            {
+                //reporterService.send();
+                issuesService.headers = [ new HTTPHeader("accept", "application/json") ];
+                issuesService.contentData = JSON.stringify({ jql: "project IN (FLEX) AND status IN (open)" });
+                issuesService.send();
+                //githubService.send();
+            }
+            
+            private function issueCountArrived():void
+            {
+                var results:String = issuesService.data;
+                var c:int = results.indexOf("(");
+                var c2:int = results.lastIndexOf(")");
+                var data:Object = JSON.parse(results/*.substring(c+1, c2)*/);
+                trace("issuesArrived");
+                MyModel(model).numOpenIssues = data.total;
+            }
+                        
+            private function ghDataArrived():void
+            {
+                var results:String = githubService.data;
+                var c:int = results.indexOf("(");
+                var c2:int = results.lastIndexOf(")");
+                var data:Object = JSON.parse(results.substring(c+1, c2));
+                trace("githubArrived");
+                MyModel(model).numForks = data.data.forks;
+            }
+
+            private function archiveDataArrived():void
+            {
+                var data:Object = archiveService.json;               
+                trace("archiveArrived");
+            }
+        ]]>
+    </fx:Script>
+    <js:valuesImpl>
+        <js:SimpleCSSValuesImpl />
+    </js:valuesImpl>
+    <js:initialView>
+        <local:MyInitialView />
+    </js:initialView>
+    <js:model>
+        <models:MyModel configService="{configService}" reporterService="{reporterService}" releaseService="{releaseService}" />
+    </js:model>
+    <js:controller>
+        <controllers:MyController />
+    </js:controller>
+    <js:beads>
+        <js:ApplicationDataBinding />
+        <js:CallLaterBead id="callLater" />
+        <js:HTTPService id="reporterService" url="{MyModel(model).reporterURL}" />
+        <js:HTTPService id="configService" url="config.json" complete="callLater.callLater(fetchData)"/>
+        <js:HTTPService id="issuesService" url="{MyModel(model).issueCounterURL}" method="POST" 
+                        contentType="application/json"
+                        complete="issueCountArrived()" />
+        <js:HTTPService id="githubService" url="{MyModel(model).githubURL}" complete="ghDataArrived()" />
+        <js:HTTPService id="archiveService" url="{MyModel(model).archiveURL}" complete="archiveDataArrived()" />
+        <js:HTTPService id="releaseService" />
+        <js:ViewSourceContextMenuOption />
+    </js:beads>
+</js:Application>
