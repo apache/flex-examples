@@ -457,7 +457,10 @@ package models
         {
             var p:Product = currentProduct;
             archiveList = findLinks(releaseService.data, p.excludes);
-            releaseService.url = p.releaseURL;
+            if (p.releaseURL.indexOf("http") == -1)
+                releaseService.url = p.releaseURL + "index.html";
+            else
+                releaseService.url = p.releaseURL;
             releaseService.removeEventListener("complete", archiveCompleteHandler);
             releaseService.addEventListener("complete", releaseCompleteHandler);
             releaseService.send();
@@ -549,7 +552,10 @@ package models
         private function getReleases():void
         {
             var p:Product = currentProduct;
-            releaseService.url = p.archiveURL;
+            if (p.archiveURL.indexOf("http") == -1)
+                releaseService.url = p.archiveURL + "index.html";
+            else           
+                releaseService.url = p.archiveURL;
             releaseService.addEventListener("complete", archiveCompleteHandler);
             releaseService.send();
         }
