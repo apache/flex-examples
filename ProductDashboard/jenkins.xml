@@ -37,4 +37,7 @@
         <delete dir="${basedir}/temp" failonerror="false" />
     </target>
     
+    <target name="wipe-sdk" >
+        <delete dir="${basedir}/ApacheFlexJSSDK" failonerror="false" />
+    </target>
 </project>
