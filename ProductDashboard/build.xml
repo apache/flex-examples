@@ -20,10 +20,17 @@
 
 <project name="ProjectDashboard" basedir="." default="main">
     <property environment="env"/>
-    <property name="FLEX_HOME" value="${env.FLEX_HOME}" />
-    <property name="FLEXJS_HOME" value="${env.FLEX_HOME}" />
-    <property name="FALCON_HOME" value="${env.FLEX_HOME}" />
-    <property name="FALCONJX_HOME" value="${env.FLEX_HOME}/js" />
+    <available file="${env.FLEX_HOME}/js/bin/mxmlc"
+    type="file"
+    property="FLEX_HOME"
+    value="${env.FLEX_HOME}" />
+
+    <fail message="The environment variable FLEX_HOME is not set to a FlexJS SDK"
+        unless="FLEX_HOME"/>
+
+    <property name="FLEXJS_HOME" value="${FLEX_HOME}" />
+    <property name="FALCON_HOME" value="${FLEX_HOME}" />
+    <property name="FALCONJX_HOME" value="${FLEX_HOME}/js" />
     
     <property name="theme_arg" value="-theme=${FLEX_HOME}/frameworks/libs/flat.swc" />
     <property name="example" value="ProjectDashboard" />
