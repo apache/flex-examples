@@ -43,5 +43,6 @@
     
     <target name="wipe-sdk" >
         <delete dir="${basedir}/ApacheFlexJSSDK" failonerror="false" />
+        <antcall target="installFlexJS" />
     </target>
 </project>
