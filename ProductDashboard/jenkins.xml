@@ -26,6 +26,10 @@
     value="${env.FLEX_HOME}" />
 
     <target name="main" unless="FLEX_HOME">
+        <antcall target="installFlexJS" />
+    </target>
+    
+    <target name="installFlexJS" >
         <mkdir dir="${basedir}/ApacheFlexJSSDK" />
         <mkdir dir="${basedir}/temp" />
         <get src="${APACHE_FLEXJS_BINARY_PACKAGE}"
