@@ -502,7 +502,7 @@ package models
                         name = name.substr(0, name.length - 1);
                     arr.push(name);
                 }
-                c = s.indexOf("href", c2);
+                c = s.indexOf("href=", c2);
             }
             return arr;
         }
