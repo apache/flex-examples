@@ -87,5 +87,6 @@ limitations under the License.
         <js:HTTPService id="archiveService" url="{MyModel(model).archiveURL}" complete="archiveDataArrived()" />
         <js:HTTPService id="releaseService" />
         <js:ViewSourceContextMenuOption />
+        <js:BrowserResizeHandler minWidth="1000" minHeight="600" />
     </js:beads>
 </js:Application>
