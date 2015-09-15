@@ -80,6 +80,21 @@ package models
             }
         }
         
+        private var _peopleService:HTTPService;
+        
+        public function get peopleService():HTTPService
+        {
+            return _peopleService;
+        }
+        
+        public function set peopleService(value:HTTPService):void
+        {
+            if (value != _peopleService)
+            {
+                _peopleService = value;
+            }
+        }
+        
 		private var _projectName:String;
 		
         [Bindable("projectNameChanged")]
@@ -150,20 +165,20 @@ package models
 			}
 		}
 		
-		private var _githubURL:String = "";
+		private var _peopleURL:String = "";
 		
-		[Bindable("githubURLChanged")]
-		public function get githubURL():String
+		[Bindable("peopleURLChanged")]
+		public function get peopleURL():String
 		{
-			return _githubURL;
+			return _peopleURL;
 		}
 		
-        public function set githubURL(value:String):void
+        public function set peopleURL(value:String):void
         {
-            if (value != _githubURL)
+            if (value != _peopleURL)
             {
-                _githubURL = value;
-                dispatchEvent(new Event("githubURLChanged"));
+                _peopleURL = value;
+                dispatchEvent(new Event("peopleURLChanged"));
             }
         }
 		
@@ -290,14 +305,15 @@ package models
             configData = data;
             archiveURL = data['archiveURL'];
             reporterURL = data['reporterURL'];
-            githubURL = data['githubURL'];
+            peopleURL = data['peopleURL'];
             issueCounterURL = data['issueCounterURL'];
             projectName = data['projectName'];
             projectTitle = data['projectTitle'];
             projectIcon = data['projectIcon'];
             reporterKey = data['reporterKey'];
             productList = createProducts(data['products']);
-            dispatchEvent(new Event("configChanged"));            
+            dispatchEvent(new Event("configChanged"));
+            getPeopleData();
         }
 
         private var reporterKey:String;
@@ -315,25 +331,17 @@ package models
         
         private var _numPMC:int = -1;
         
-        [Bindable("reportChanged")]
+        [Bindable("peopleChanged")]
         public function get numPMC():int
         {
-            if (_numPMC < 0)
-            {
-                _numPMC = report["count"][reporterKey][0];
-            }
             return _numPMC;
         }
 
         private var _numCommitters:int = -1;
         
-        [Bindable("reportChanged")]
+        [Bindable("peopleChanged")]
         public function get numCommitters():int
         {
-            if (_numCommitters < 0)
-            {
-                _numCommitters = report["count"][reporterKey][1];
-            }
             return _numCommitters;
         }
         
@@ -559,6 +567,41 @@ package models
             releaseService.addEventListener("complete", archiveCompleteHandler);
             releaseService.send();
         }
+        
+        private function getPeopleData():void
+        {
+            if (peopleURL.indexOf("http") == -1)
+                peopleService.url = peopleURL + "index.html";
+            else           
+                peopleService.url = peopleURL;
+            peopleService.addEventListener("complete", peopleCompleteHandler);
+            peopleService.send();
+        }
 
+        private function peopleCompleteHandler(event:Event):void
+        {
+            var s:String = peopleService.data;
+            var c:int = s.indexOf('id="' + configData["committerKey"] + '"');
+            var c2:int = s.indexOf("</table>", c);
+            var list:String = s.substring(c, c2);
+            c = list.indexOf("<tr");
+            _numCommitters = 0;
+            while (c != -1)
+            {
+                _numCommitters++;
+                c = list.indexOf("<tr", c + 1);
+            }
+            c = s.indexOf('id="' + configData["pmcKey"] + '"');
+            c2 = s.indexOf("</table>", c);
+            list = s.substring(c, c2);
+            c = list.indexOf("<tr");
+            _numPMC = 0;
+            while (c != -1)
+            {
+                _numPMC++;
+                c = list.indexOf("<tr", c + 1);
+            }
+            dispatchEvent(new Event("peopleChanged"));
+        }
 	}
 }

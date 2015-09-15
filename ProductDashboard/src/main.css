@@ -52,6 +52,16 @@ global {
     height:             60px;
 }
 
+.statsContainer {
+    height:             30px;
+    border-radius: 6px;
+    border-width: 2px;
+    border: 2px solid #1abc9c;
+    padding-top: 4px;
+    padding-left: 8px;
+
+}
+
 .mailButton {
     width:             190px;
 }
@@ -89,5 +99,10 @@ global {
     right:              10px;
 }
 
+#projectCommitters {
+    vertical-align: top;
+}
 
-
+#projectPMC {
+    vertical-align: top;
+}

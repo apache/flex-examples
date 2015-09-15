@@ -73,5 +73,7 @@
                   "excludes" : ["http://www.apache.org/dyn/closer.cgi", "?C=N;O=D", "?C=M;O=A", "?C=S;O=A", "?C=D;O=A", "/dist/flex/", "../"]
                 }
                 ],
-  "githubURL" : "https://api.github.com/repos/apache/flex-sdk?callback=foo"  
+  "committerKey" : "flex",
+  "pmcKey" : "flex-pmc",  
+  "peopleURL" : "http://people.apache.org/committers-by-project.html"  
 }

@@ -54,15 +54,21 @@ limitations under the License.
         <js:Image id="projectImage" source="{MyModel(applicationModel).projectIcon}" />
         <js:Label id="projectName" style="fontSize:30" html="{MyModel(applicationModel).projectTitle}" />
     </js:HContainer>
+    <js:HContainer width="100%">
+        <js:HContainer className="statsContainer" width="48%">
+            <js:Label id="projectCommitters" text="{MyModel(applicationModel).numCommitters + ' Committers    '}" />
+        </js:HContainer>
+        <js:HContainer className="statsContainer" width="48%" style="marginLeft:10px">
+            <js:Label id="projectPMC" text="{MyModel(applicationModel).numPMC + ' Project Management Committee members'}" />
+        </js:HContainer>
+    </js:HContainer>
     <js:HContainer width="100%" height="50%">
-        <js:Panel title="{MyModel(applicationModel).devListName}" width="45%" height="100%">
+        <js:Panel title="{MyModel(applicationModel).devListName}" width="48%" height="100%">
             <js:beads>
                 <js:VerticalLayout />
             </js:beads>
 <!--            <js:Label id="committers" text="{MyModel(applicationModel).numDevSubscribers + ' Subscribers'}" />-->
             <js:MultilineLabel id="devFolks" width="100%" text="{'This mailing list is for discussing the development of ' + MyModel(applicationModel).projectName + '.'}" /> 
-            <!--            <js:Label id="committers" text="{MyModel(applicationModel).numCommitters + ' Committers, of which'}" />
-            <js:Label id="pmc" text="{MyModel(applicationModel).numPMC + ' are Project Management Committee members.'}" />-->
             <js:Container className="buttonAndLabel">
                 <js:beads>
                     <js:OneFlexibleChildHorizontalLayout flexibleChild="subLabel" />
@@ -86,7 +92,7 @@ limitations under the License.
                 <js:MultilineLabel id="sendLabel" text="May be delayed waiting for moderator approval if you aren't subscribed." />
             </js:Container> 
         </js:Panel>
-        <js:Panel title="{MyModel(applicationModel).usersListName}" width="45%" height="100%" style="marginLeft:10px">
+        <js:Panel title="{MyModel(applicationModel).usersListName}" width="48%" height="100%" style="marginLeft:10px">
             <js:beads>
                 <js:VerticalLayout />
             </js:beads>
@@ -117,7 +123,7 @@ limitations under the License.
         </js:Panel>
     </js:HContainer>
     <js:HContainer width="100%" height="30%" style="marginTop:10px">
-        <js:Panel title="Releases" width="45%"  height="100%">
+        <js:Panel title="Releases" width="48%"  height="100%">
             <js:beads>
                 <js:VerticalLayout />
                 <js:LayoutChangeNotifier id="lcn" watchedProperty="{releaseDownloadButton.visible}" />
@@ -135,7 +141,7 @@ limitations under the License.
             <js:TextButton className="releaseDownloadButton" id="releaseDownloadButton" text="Go to Download Page" click="dispatchEvent(new Event(EVENT_DOWNLOAD_PRODUCT))" 
                            visible="{MyModel(applicationModel).releases != null}"/>
         </js:Panel>
-        <js:Panel title="Bugs and Feature Requests" width="45%" height="100%" style="marginLeft:10px" >
+        <js:Panel title="Bugs and Feature Requests" width="48%" height="100%" style="marginLeft:10px" >
             <js:beads>
                 <js:VerticalLayout />
             </js:beads>

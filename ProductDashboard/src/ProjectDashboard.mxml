@@ -33,7 +33,7 @@ limitations under the License.
                 issuesService.headers = [ new HTTPHeader("accept", "application/json") ];
                 issuesService.contentData = JSON.stringify({ jql: "project IN (FLEX) AND status IN (open)" });
                 issuesService.send();
-                //githubService.send();
+                peopleService.send();
             }
             
             private function issueCountArrived():void
@@ -46,21 +46,6 @@ limitations under the License.
                 MyModel(model).numOpenIssues = data.total;
             }
                         
-            private function ghDataArrived():void
-            {
-                var results:String = githubService.data;
-                var c:int = results.indexOf("(");
-                var c2:int = results.lastIndexOf(")");
-                var data:Object = JSON.parse(results.substring(c+1, c2));
-                trace("githubArrived");
-                MyModel(model).numForks = data.data.forks;
-            }
-
-            private function archiveDataArrived():void
-            {
-                var data:Object = archiveService.json;               
-                trace("archiveArrived");
-            }
         ]]>
     </fx:Script>
     <js:valuesImpl>
@@ -70,7 +55,8 @@ limitations under the License.
         <local:MyInitialView />
     </js:initialView>
     <js:model>
-        <models:MyModel configService="{configService}" reporterService="{reporterService}" releaseService="{releaseService}" />
+        <models:MyModel configService="{configService}" reporterService="{reporterService}" 
+                        releaseService="{releaseService}" peopleService="{peopleService}"/>
     </js:model>
     <js:controller>
         <controllers:MyController />
@@ -83,8 +69,7 @@ limitations under the License.
         <js:HTTPService id="issuesService" url="{MyModel(model).issueCounterURL}" method="POST" 
                         contentType="application/json"
                         complete="issueCountArrived()" />
-        <js:HTTPService id="githubService" url="{MyModel(model).githubURL}" complete="ghDataArrived()" />
-        <js:HTTPService id="archiveService" url="{MyModel(model).archiveURL}" complete="archiveDataArrived()" />
+        <js:HTTPService id="peopleService" />
         <js:HTTPService id="releaseService" />
         <js:ViewSourceContextMenuOption />
         <js:BrowserResizeHandler minWidth="1000" minHeight="600" />
