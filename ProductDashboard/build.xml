@@ -218,6 +218,7 @@
     </macrodef>
     
     <target name="get-data" description="gets data from various sources, sort of like a proxy server">
+        <mkdir dir="${basedir}/bin-debug/people.apache.org" />
         <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/flexjs" />
         <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/installer" />
         <mkdir dir="${basedir}/bin-debug/archive.apache.org/dist/flex/BlazeDS" />
@@ -231,6 +232,8 @@
         <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/squiggly" />
         <mkdir dir="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/tourdeflex" />
         <mkdir dir="${basedir}/bin-debug/issues.apache.org/jira/rest/api/2" />
+        <get src="http://people.apache.org/committers-by-project.html"
+            dest="${basedir}/bin-debug/people.apache.org/committers-by-project.html" />
         <get src="http://archive.apache.org/dist/flex/"
             dest="${basedir}/bin-debug/archive.apache.org/dist/flex/index.html" />
         <get src="http://archive.apache.org/dist/flex/flexjs/"
@@ -261,6 +264,7 @@
             dest="${basedir}/bin-debug/dist.apache.org/repos/dist/release/flex/tourdeflex/index.html" />
         <get src="https://issues.apache.org/jira/rest/api/2/search?jql=project%20%3D%20FLEX%20AND%20status%20%3D%20open"
             dest="${basedir}/bin-debug/issues.apache.org/jira/rest/api/2/search" />
+        <mkdir dir="${basedir}/bin/js-debug/people.apache.org" />
         <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/flexjs" />
         <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/installer" />
         <mkdir dir="${basedir}/bin/js-debug/archive.apache.org/dist/flex/BlazeDS" />
@@ -277,9 +281,11 @@
         <copy todir="${basedir}/bin/js-debug">
             <fileset dir="${basedir}/bin-debug">
                 <include name="**/index.html" />
+                <include name="**/committers-by-project.html" />
                 <include name="issues.apache.org/jira/rest/api/2/search" />
             </fileset>
         </copy>
+        <mkdir dir="${basedir}/bin/js-release/people.apache.org" />
         <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/flexjs" />
         <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/installer" />
         <mkdir dir="${basedir}/bin/js-release/archive.apache.org/dist/flex/BlazeDS" />
@@ -296,6 +302,7 @@
         <copy todir="${basedir}/bin/js-release">
             <fileset dir="${basedir}/bin-debug">
                 <include name="**/index.html" />
+                <include name="**/committers-by-project.html" />
                 <include name="issues.apache.org/jira/rest/api/2/search" />
             </fileset>
         </copy>
