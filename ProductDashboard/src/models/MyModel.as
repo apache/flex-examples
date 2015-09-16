@@ -570,10 +570,7 @@ package models
         
         private function getPeopleData():void
         {
-            if (peopleURL.indexOf("http") == -1)
-                peopleService.url = peopleURL + "index.html";
-            else           
-                peopleService.url = peopleURL;
+            peopleService.url = peopleURL;
             peopleService.addEventListener("complete", peopleCompleteHandler);
             peopleService.send();
         }
