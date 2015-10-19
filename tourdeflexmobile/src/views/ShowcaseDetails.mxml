@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Flex Showcase" viewActivate="init(event)" xmlns:renderers="renderers.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			
+			import spark.components.Label;
+			import spark.events.ViewNavigatorEvent;
+			
+			private var imagesArray:Array;
+			
+			protected function init(event:ViewNavigatorEvent):void
+			{
+				titleTxt.text = data.@title;
+				authorTxt.text = data.@author;
+				
+				if(data.@website){
+					websiteTxt.text = data.@website;
+				} else {
+					//Do Nothing
+				}
+				
+				descriptionTxt.text = data.description;
+				imagesArray = new Array();
+								
+				for each (var image:* in data.images.image){
+					imagesArray.push("http://flex.apache.org/showcase/images/"+data.images.@baseDir+"/prev/"+image.@file);
+				}
+				
+				thumbnailList.dataProvider = new ArrayList(imagesArray);								
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Scroller id="myScroller" top="10" bottom="10" left="10" right="10">
+		<s:VGroup width="100%" height="100%" gap="10">
+			<s:Spacer height="5" width="5"/>
+			<s:Label id="titleTxt" width="100%" paddingLeft="10" paddingRight="10"/>
+			<s:Label id="authorTxt" width="100%" paddingLeft="10" paddingRight="10" fontWeight="bold"/>
+			<s:Label id="websiteTxt" width="100%" paddingLeft="10" paddingRight="10" textDecoration="underline" color="#006699"/>
+			<s:List id="thumbnailList" width="100%" height="250" itemRenderer="renderers.ShowcaseImageRenderer" verticalScrollPolicy="off" contentBackgroundColor="#D7DADD" pageScrollingEnabled="true">
+				<s:layout>
+					<s:TileLayout useVirtualLayout="true" columnWidth="{myScroller.width}" rowHeight="250" orientation="columns" horizontalGap="0" verticalGap="0"/>
+				</s:layout>
+			</s:List>			
+			<s:Label id="descriptionTxt" width="100%" paddingLeft="10" paddingRight="10"/>
+			<s:Spacer height="5" width="5"/>
+		</s:VGroup>	
+	</s:Scroller>
+	
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
+</s:View>

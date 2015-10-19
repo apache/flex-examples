@@ -48,13 +48,27 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="assets/icons/480/dock.png"/>
 	</fx:Declarations>
 	
-	<s:TextInput includeIn="DemoState" id="textInput" skinClass="spark.skins.mobile.TextInputSkin" prompt="Type Here and Tap Enter" left="5" right="5" top="5" height="40" enter="submitText()" />
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
 	
-	<s:Label includeIn="DemoState" id="label" horizontalCenter="0" y="60" textAlign="center"/>
+	<s:TextInput includeIn="DemoState" id="textInput" skinClass="spark.skins.mobile.TextInputSkin" prompt="Type Here and Tap Enter" left="10" right="10" top="10" height="40" enter="submitText()" />
+	
+	<s:Label includeIn="DemoState" id="label" horizontalCenter="0" y="70" textAlign="center"/>
 	
 	<s:TextArea includeIn="InfoState" skinClass="spark.skins.mobile.TextAreaSkin" left="10" right="10" top="10" bottom="10" editable="false" text="TextInput is a text-entry control that lets users enter and edit a single line of uniformly-formatted text.
 				&#xd; &#xd;The TextInput skin for the Spark theme uses the RichEditableText class. This means that the Spark TextInput control supports the Text Layout Framework (TLF) library, which builds on the Flash Text Engine (FTE). In combination, these layers provide text editing with high-quality international typography and layout.
@@ -80,6 +94,16 @@ limitations under the License.
 				&#xd; &#xd; Also as a result of using TLF, the Spark TextInput supports unlimited undo/redo within one editing session. An editing session starts when the control gets keyboard focus and ends when the control loses focus.
 																																																																																																																																			 
 				&#xd; &#xd;To use this component in a list-based component, such as a List or DataGrid, create an item renderer. For information about creating an item renderer, see Custom Spark item renderers."/>
+	
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
 	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>

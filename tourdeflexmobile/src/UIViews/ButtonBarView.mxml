@@ -48,11 +48,25 @@ limitations under the License.
 	</s:states>
 	
 	<fx:Declarations>
-		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" source320dpi="@Embed('assets/icons/320/about.png')"/>
-		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" source320dpi="@Embed('assets/icons/320/dock.png')"/>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="assets/icons/480/dock.png"/>
 	</fx:Declarations>
 	
-	<s:ButtonBar id="buttonbar" includeIn="DemoState" change="buttonbarHandler(event)" left="5" right="5" top="5">
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:ButtonBar id="buttonbar" includeIn="DemoState" change="buttonbarHandler(event)" left="10" right="10" top="10">
 		<s:ArrayList>
 			<fx:Object label="Button 1"/>
 			<fx:Object label="Button 2"/>
@@ -72,6 +86,16 @@ limitations under the License.
 				&#xd; &#xd;For non-mobile projects, you can use the ButtonBar control to set the active child of a ViewStack container, as the following example shows:
 				
 				&#xd; &#xd;Note: The Spark list-based controls (the Spark ListBase class and its subclasses such as ButtonBar, ComboBox, DropDownList, List, and TabBar) do not support the BasicLayout class as the value of the layout property. Do not use BasicLayout with the Spark list-based controls."/>
+	
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
 	
 	<s:actionContent>
 		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>

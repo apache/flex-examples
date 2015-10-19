@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Videos" viewActivate="init(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.ViewNavigatorEvent;
+			
+			private static const YOUTUBE_API_KEY:String = "COPY_YOUR_YOUTUBE_APIKEY_HERE";
+			private var pageToken:String;
+			private var loading:Boolean;
+									
+			protected function init(event:ViewNavigatorEvent):void
+			{
+				myBusy.visible = true;
+				pageToken = "";
+				youtubeService.url = "https://www.googleapis.com/youtube/v3/search?q=Apache%20Flex%7CAdobe%20Flex&maxResults=50&order=date&type=video&part=snippet&key="+YOUTUBE_API_KEY;
+				youtubeService.send();
+			}
+			
+			protected function changeSearch(event:IndexChangeEvent):void
+			{			
+				
+				pageToken = "";
+				myBusy.visible = true;
+				
+				if(myButtonBar.selectedItem.search == "RecentVideos"){
+					youtubeService.url = "https://www.googleapis.com/youtube/v3/search?q=Apache%20Flex%7CAdobe%20Flex&maxResults=50&order=date&type=video&part=snippet&key="+YOUTUBE_API_KEY;
+				} else {
+					youtubeService.url = "https://www.googleapis.com/youtube/v3/search?q=Apache%20Flex%7CAdobe%20Flex&maxResults=50&order=relevance&type=video&part=snippet&key="+YOUTUBE_API_KEY;
+				}
+				
+				videosList.dataProvider = null;
+				youtubeService.send();
+			}
+			
+			protected function youtubeService_resultHandler(event:ResultEvent):void
+			{
+				var rawData:Object = JSON.parse(String(event.result));
+				pageToken = rawData.nextPageToken;
+				
+				if(videosList.dataProvider == null){
+					var videosArray:ArrayList = new ArrayList(rawData.items as Array);
+					videosList.dataProvider = videosArray;
+				} else {
+					for each (var item:* in rawData.items){
+						videosList.dataProvider.addItem(item);
+					}
+				}
+				
+				loading = false;
+				myBusy.visible = false;
+			}
+			
+			protected function selectVideo(event:IndexChangeEvent):void
+			{
+				var myObject:Object = new Object();
+				myObject.title = videosList.selectedItem.snippet.title;
+				myObject.url = videosList.selectedItem.id.videoId;
+				navigator.pushView(VideoDetailsView, myObject);
+			}
+			
+			protected function videosList_creationCompleteHandler(event:FlexEvent):void
+			{
+				videosList.scroller.viewport.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);
+			}
+			
+			protected function propertyChangeHandler( event : PropertyChangeEvent):void {
+				if(event.property == "verticalScrollPosition"){
+					if(event.newValue == ( event.currentTarget.measuredHeight - event.currentTarget.height)){
+						loadMore();
+					}
+				}
+			}
+			
+			public function loadMore():void{
+				if(!loading){
+					myBusy.visible = true;
+					loading = true;
+					
+					if(myButtonBar.selectedItem.search == "RecentVideos"){
+						youtubeService.url = "https://www.googleapis.com/youtube/v3/search?q=Apache%20Flex%7CAdobe%20Flex&maxResults=50&pageToken="+pageToken+"&order=date&type=video&part=snippet&key="+YOUTUBE_API_KEY;
+					} else {
+						youtubeService.url = "https://www.googleapis.com/youtube/v3/search?q=Apache%20Flex%7CAdobe%20Flex&maxResults=50&pageToken="+pageToken+"&order=relevance&type=video&part=snippet&key="+YOUTUBE_API_KEY;
+					}
+					
+					youtubeService.send();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:HTTPService id="youtubeService" resultFormat="text" result="youtubeService_resultHandler(event)"/>
+	</fx:Declarations>
+		
+	<s:ButtonBar  id="myButtonBar" change="changeSearch(event)" left="5" right="5" top="5" height="40" requireSelection="true" selectedIndex="0">
+		<s:ArrayList>
+			<fx:Object label="Recent Videos" search="RecentVideos"/>
+			<fx:Object label="Popular Videos" search="PopularVideos"/>
+		</s:ArrayList>	
+	</s:ButtonBar>
+	
+	<s:List id="videosList" creationComplete="videosList_creationCompleteHandler(event)" change="selectVideo(event)" width="100%" top="50" bottom="0">
+		<s:itemRenderer>
+			<fx:Component>
+				<s:IconItemRenderer labelFunction="myLabelFunction" messageFunction="myMessageFunction" iconFunction="myIconFunction" iconWidth="60" iconHeight="50" iconScaleMode="letterbox">
+					<s:decorator>
+						<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_next_item.png')"
+												source240dpi="@Embed('assets/icons/240/1_navigation_next_item.png')"
+												source320dpi="@Embed('assets/icons/320/1_navigation_next_item.png')"/>
+					</s:decorator>
+					
+					<fx:Script>
+						<![CDATA[
+							
+							private function myIconFunction(item:Object):String{		
+								return data.snippet.thumbnails.medium.url;							
+							}
+							
+							private function myLabelFunction(item:Object):String{								
+								return data.snippet.title;
+							}
+							
+							private function myMessageFunction(item:Object):String{								
+								return data.snippet.channelTitle+ "\n" + String(data.snippet.publishedAt).substr(0, 10);
+							}
+						]]>
+					</fx:Script>
+				</s:IconItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+	
+	<s:BusyIndicator id="myBusy" verticalCenter="0" horizontalCenter="0" visible="false"/>
+</s:View>

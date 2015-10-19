@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="CameraRoll" >
+	
+	<fx:Script>
+		<![CDATA[
+			
+			private var mpLoader:Loader;
+			
+			protected function launchcameraRoll(event:MouseEvent):void
+			{
+				var cameraRoll:CameraRoll = new CameraRoll();
+				
+				if( CameraRoll.supportsBrowseForImage )
+				{
+					cameraRoll.addEventListener(MediaEvent.SELECT, oncameraRollComplete);
+					cameraRoll.addEventListener(Event.CANCEL, oncameraRollCanceled);
+					cameraRoll.addEventListener(ErrorEvent.ERROR, onCameraError);
+					cameraRoll.browseForImage();
+				}
+				else
+				{
+					trace( "CameraRoll interface is not supported.");
+				}		
+			}
+			
+			private function oncameraRollComplete(e:MediaEvent):void
+			{
+				var mediaPromise:MediaPromise = e.data;
+				
+				this.mpLoader = new Loader();
+				this.mpLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onMediaPromiseLoaded);
+				this.mpLoader.addEventListener(IOErrorEvent.IO_ERROR, onMediaPromiseLoadError);
+				this.mpLoader.loadFilePromise(mediaPromise);
+			}
+			
+			private function onMediaPromiseLoaded(e:Event):void
+			{
+				var mpLoaderInfo:LoaderInfo = e.target as LoaderInfo;
+				
+				mpLoaderInfo.removeEventListener(Event.COMPLETE, onMediaPromiseLoaded);				
+				mpLoaderInfo.loader.removeEventListener(IOErrorEvent.IO_ERROR, onMediaPromiseLoadError);
+				
+				this.image.source = mpLoaderInfo.loader;
+			}
+			
+			protected function oncameraRollCanceled(event:Event):void
+			{
+				trace("CameraRoll canceled");
+			}
+			
+			
+			protected function onCameraError(event:ErrorEvent):void
+			{
+				trace("Error");
+			}
+			
+			protected function onMediaPromiseLoadError(error:IOErrorEvent):void
+			{
+				trace("Media Promise Error");
+			}
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" source160dpi="@Embed('assets/icons/160/about.png')" source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" source160dpi="@Embed('assets/icons/160/dock.png')" source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" source480dpi="assets/icons/480/dock.png"/>
+	</fx:Declarations>
+	
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Button label="Browse Image" click="launchcameraRoll(event)" horizontalCenter="0" verticalCenter="0" />
+	<s:Image id="image" scaleMode="letterbox" top="15" left="15" right="15" bottom="15" />
+	
+	<s:TextArea includeIn="InfoState" selectable="false" left="10" right="10" top="10" bottom="10" editable="false" text="The CameraRoll class allows you to access image data in the system media library or camera roll.
+				&#xd;&#xd;AIR profile support: This feature is supported on mobile devices, but it is not supported on desktop operating systems or AIR for TV devices. See AIR Profile Support for more information regarding API support across multiple profiles.
+				&#xd;&#xd;The CameraRoll.addBitmapData() method adds an image to the device's dedicated media library. To check at run time whether your application supports the CameraRoll.addBitmapData() method, check the CameraRoll.supportsAddBitmapData property.
+				&#xd;&#xd;The CameraRoll.browseForImage() method opens an image-choosing dialog that allows a user to choose an image in the media library. When the user selects an image, the CameraRoll object dispatches a select event. Use the MediaEvent object dispatched for this event to access the chosen image. To check at run time whether your application supports the CameraRoll.browseForImage() method, check the CameraRoll.supportsBrowseForImage property."/>
+	
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+	
+</s:View>

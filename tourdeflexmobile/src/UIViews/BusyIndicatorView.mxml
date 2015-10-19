@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="BusyIndicator" >
+	<fx:Script>
+		<![CDATA[
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>
+	</fx:Declarations>
+	
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%" includeIn="DemoState" horizontalAlign="center" verticalAlign="middle">
+		<s:BusyIndicator id="busyIndicator" />
+		<s:Spacer height="10"/>
+		<s:Label id="label" horizontalCenter="0" textAlign="center"/>
+	</s:VGroup>	
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="The BusyIndicator defines a component to display when a long-running operation is in progress. 
+				&#xd; &#xd;For Web, Desktop and iOS, a spinner with twelve spoke is drawn. The color of the spokes is controlled by the value of the symbolColor style.
+				&#xd; &#xd;For Android, a circle is drawn that rotates.
+				&#xd; &#xd;The transparency of this component can be modified using the alpha property, but the alpha value of each spoke cannot be modified.
+				"/>	
+
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>

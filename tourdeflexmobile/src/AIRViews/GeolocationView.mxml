@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="Geolocation" 
+		viewDeactivate="endGeolocation(event)" 
+		viewActivate="init(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.sensors.Geolocation;			
+			import spark.events.ViewNavigatorEvent;
+			
+			private var geo:Geolocation;		
+			
+			protected function init(event:ViewNavigatorEvent):void
+			{
+				if (Geolocation.isSupported) 
+				{ 
+					geoToggle.enabled = true;
+					geo = new Geolocation(); 
+					geo.setRequestedUpdateInterval(8000);
+				}
+				else 
+				{ 
+					label.text = "Geolocation not supported"; 
+				} 
+			}
+			
+			protected function geoLocate():void
+			{
+				if(geoToggle.selected == true)
+				{
+					geo.addEventListener(GeolocationEvent.UPDATE, geoUpdateHandler); 				
+				}
+				if(geoToggle.selected == false)
+				{
+					geo.removeEventListener(GeolocationEvent.UPDATE, geoUpdateHandler); 					
+				}
+			}
+
+			
+			public function geoUpdateHandler(event:GeolocationEvent):void 
+			{ 
+				latitude.text = "latitude : " + event.latitude.toString(); 
+				longitude.text = "longitude : " + event.longitude.toString();
+				heading.text = "heading : " + event.heading.toString();
+				speed.text = "speed : " + event.speed.toString();
+			} 
+
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
+			}
+			
+			protected function endGeolocation(event:ViewNavigatorEvent):void
+			{
+				if(geoToggle.selected == true)
+				{
+					geo.removeEventListener(GeolocationEvent.UPDATE, geoUpdateHandler);	
+				}						
+			}
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/about.png')" id="aboutIcon"  
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')"
+								source480dpi="@Embed('assets/icons/480/about.png')"/>
+		<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/dock.png')" id="demoIcon"
+								source240dpi="@Embed('assets/icons/240/dock.png')"  
+								source320dpi="@Embed('assets/icons/320/dock.png')"
+								source480dpi="@Embed('assets/icons/480/dock.png')"/>	
+	</fx:Declarations>
+	
+	<s:Rect left="10" right="10" top="10" bottom="10" radiusX="5" radiusY="5">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:ToggleSwitch includeIn="DemoState" horizontalCenter="0" y="20" id="geoToggle" enabled="false" change="geoLocate()"/>
+	<s:VGroup left="20" right="20" top="55" bottom="10" includeIn="DemoState">
+		<s:Label id="label" left="10"/>
+		<s:Label id="latitude" left="10"/>
+		<s:Label id="longitude" left="10"/>
+		<s:Label id="heading" left="10"/>
+		<s:Label id="speed" left="10"/>
+	</s:VGroup>	
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" text="The Geolocation class dispatches events in response to the device's location sensor.				
+				&#xd; &#xd;If a device supports geolocation, you can use this class to obtain the current geographical location of the device. The geographical location is displayed on the device in the form of latitudinal and longitudinal coordinates (in WGS-84 standard format). When the location of the device changes, you can receive updates about the changes. If the device supports this feature, you will be able to obtain information about the altitude, accuracy, heading, speed, and timestamp of the latest change in the location.
+				&#xd; &#xd;AIR profile support: This feature is supported only on mobile devices. It is not supported on desktop or AIR for TV devices."/>	
+	
+	<s:navigationContent>
+		<s:Button click="navigator.popView()">
+			<s:icon>
+				<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_previous_item.png')"
+										source240dpi="@Embed('assets/icons/240/1_navigation_previous_item.png')"
+										source320dpi="@Embed('assets/icons/320/1_navigation_previous_item.png')"/>
+			</s:icon>
+		</s:Button>
+	</s:navigationContent>
+	
+	<s:actionContent>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>

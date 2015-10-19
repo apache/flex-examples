@@ -29,19 +29,8 @@ limitations under the License.
 				
 				if(data){
 					
-					if(data.type == "view"){
-						autoDrawBackground = true;
-						currentState = "ViewState";		
-					} else if(data.type == "separator"){
-						autoDrawBackground = false;
-						opaqueBackground = 0x464646;
-						currentState = "SeparatorState";
-					} else {
-						autoDrawBackground = true;
-						currentState = "ViewState";	
-					}
-					
 					itemLabel.text = data.label;
+					iconImg.source = String(data.icon);
 					
 				}
 			}
@@ -49,11 +38,7 @@ limitations under the License.
 		]]>
 	</fx:Script>
 	
-	<s:states>
-		<s:State name="ViewState"/>
-		<s:State name="SeparatorState"/>
-	</s:states>
-	
-	<s:Label id="itemLabel"  color.SeparatorState="#888888" color.ViewState="#FFFFFF" x="10" verticalCenter="0"/>
+	<s:BitmapImage id="iconImg" verticalCenter="0" x="10" width="20" height="20" smooth="true"/>
+	<s:Label id="itemLabel" x="40" verticalCenter="0" styleName="pixelLabel"/>
 	
 </s:ItemRenderer>

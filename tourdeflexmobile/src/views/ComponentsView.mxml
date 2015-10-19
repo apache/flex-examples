@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Components">
+	<fx:Script>
+		<![CDATA[
+				
+			import UIViews.ActionBarView;
+			import UIViews.ButtonBarView;
+			import UIViews.BusyIndicatorView;
+			import UIViews.CalloutButtonView;
+			import UIViews.CheckboxView;
+			import UIViews.DateSpinnerView;
+			import UIViews.HscrubberView;
+			import UIViews.ListView;
+			import UIViews.MobileGridView;
+			import UIViews.RadiobuttonView;
+			import UIViews.SpinnerListView;
+			import UIViews.TextInputView;
+			import UIViews.ToggleSwitchView;
+			
+			import LayoutViews.HorizontalLayoutView;
+			import LayoutViews.VerticalLayoutView;
+			import LayoutViews.TileLayoutView;
+			
+			import AIRViews.AccelerometerView;
+			import AIRViews.CameraRollView;
+			import AIRViews.CameraUIView;
+			import AIRViews.GeolocationView;
+			import AIRViews.NativeAppView;
+			import AIRViews.SQLiteView;
+			
+			protected function listHandler(event:MouseEvent):void
+			{
+				navigator.pushView(componentsList.selectedItem.view);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:List id="componentsList" width="100%" height="100%" click="listHandler(event)">
+		<s:dataProvider>
+			<s:ArrayList>
+				<fx:Object label="ActionBar" view="{ActionBarView}"/>
+				<fx:Object label="ButtonBar" view="{ButtonBarView}"/>
+				<fx:Object label="BusyIndicator" view="{BusyIndicatorView}"/>
+				<fx:Object label="CalloutButton" view="{CalloutButtonView}"/>
+				<fx:Object label="Checkbox" view="{CheckboxView}"/>
+				<fx:Object label="DateSpinner" view="{DateSpinnerView}"/>
+				<fx:Object label="HSlider" view="{HscrubberView}"/>
+				<fx:Object label="List" view="{ListView}"/>
+				<fx:Object label="MobileGrid" view="{MobileGridView}"/>
+				<fx:Object label="RadioButton" view="{RadiobuttonView}"/>
+				<fx:Object label="SpinnerList" view="{SpinnerListView}"/>
+				<fx:Object label="TextInput" view="{TextInputView}"/>
+				<fx:Object label="toggleSwitch" view="{ToggleSwitchView}"/>
+				<fx:Object label="HorizontalLayout" view="{HorizontalLayoutView}"/>
+				<fx:Object label="VerticalLayout" view="{VerticalLayoutView}"/>
+				<fx:Object label="TileLayout" view="{TileLayoutView}"/>
+				<fx:Object label="Accelerometer" view="{AccelerometerView}"/>
+				<fx:Object label="CameraRoll" view="{CameraRollView}"/>
+				<fx:Object label="CameraUI" view="{CameraUIView}"/>
+				<fx:Object label="Geolocation" view="{GeolocationView}"/>
+				<fx:Object label="NativeApp" view="{NativeAppView}"/>
+				<fx:Object label="SQLite" view="{SQLiteView}"/>
+			</s:ArrayList>
+		</s:dataProvider>
+		<s:itemRenderer>
+			<fx:Component>
+				<s:IconItemRenderer>
+					<s:decorator>
+						<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_next_item.png')"
+												source240dpi="@Embed('assets/icons/240/1_navigation_next_item.png')"
+												source320dpi="@Embed('assets/icons/320/1_navigation_next_item.png')"/>
+					</s:decorator>
+				</s:IconItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+</s:View>

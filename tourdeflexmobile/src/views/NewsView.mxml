@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="News">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+						
+			protected function loadBlogNews(event:FlexEvent):void
+			{
+				blogService.url = "https://blogs.apache.org/flex/feed/entries/rss";
+				blogService.send();
+			}
+			
+			protected function blogService_resultHandler(event:ResultEvent):void
+			{
+				newsList.dataProvider = new XMLListCollection(new XMLList(event.result.channel.item));
+				newsList.labelField = "title";
+			}
+			
+			protected function selectItem(event:IndexChangeEvent):void
+			{
+				navigator.pushView(NewsDetailsView, newsList.selectedItem);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:HTTPService id="blogService" resultFormat="e4x" result="blogService_resultHandler(event)"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="BlogState" enterState="loadBlogNews(event)" />
+		<s:State name="TwitterState"/>
+	</s:states>
+	
+	<s:ButtonBar left="5" right="5" top="5" height="40" requireSelection="true" selectedIndex="0">
+		<s:ArrayList>
+			<fx:Object label="Blog News"/>
+			<fx:Object label="Twitter Feed"/>
+		</s:ArrayList>	
+	</s:ButtonBar>
+	
+	<s:List id="newsList" top="50" bottom="0" width="100%" change="selectItem(event)">
+		<s:itemRenderer>
+			<fx:Component>
+				<s:IconItemRenderer labelFunction="myLabelFunction" messageFunction="myMessageFunction">
+					<s:decorator>
+						<s:MultiDPIBitmapSource source160dpi="@Embed('assets/icons/160/1_navigation_next_item.png')"
+												source240dpi="@Embed('assets/icons/240/1_navigation_next_item.png')"
+												source320dpi="@Embed('assets/icons/320/1_navigation_next_item.png')"/>
+					</s:decorator>
+					
+					<fx:Script>
+						<![CDATA[
+							
+							private function myLabelFunction(item:Object):String{
+								return unescape(data.title);
+							}
+							
+							private function myMessageFunction(item:Object):String{
+								return data.pubDate;
+							}
+							
+						]]>
+					</fx:Script>
+				</s:IconItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+</s:View>

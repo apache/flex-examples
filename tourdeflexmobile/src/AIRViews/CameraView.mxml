@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		title="Camera"
+		viewActivate="init(event)"
+		viewDeactivate="deactivate(event)"
+		>
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.ViewNavigatorEvent;
+			
+			private var camera:Camera;
+			private var videoHolder:UIComponent;
+			private var video:Video;
+			
+			private function init(event:ViewNavigatorEvent):void
+			{
+				stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, handleOrientationChangeComplete);
+				stage.setOrientation(StageOrientation.ROTATED_RIGHT);
+			}
+			
+			private function deactivate(event:ViewNavigatorEvent):void
+			{
+				stage.setOrientation(StageOrientation.DEFAULT);
+			}
+			
+			private function handleOrientationChangeComplete(event:StageOrientationEvent):void
+			{
+				buttonBar.enabled = Camera.isSupported;
+				if(Camera.isSupported)
+				{
+					videoHolder = new UIComponent();
+					videoHolder.x = 0; 
+					videoHolder.y = 0; 
+					videoHolder.width = height;
+					videoHolder.height = width;
+					video = new Video(height,width)
+					videoHolder.addChildAt(video,0);
+					videoDisplay.addElementAt(videoHolder,0);
+					getCamera();
+				}				
+			}
+			
+			protected function onButtonBar_ChangeHandler(event:IndexChangeEvent):void
+			{
+				getCamera();
+			}
+			
+			private function getCamera():void
+			{
+				var names:Array = Camera.names;
+				var i:int = -1;
+				var n:int = names.length;
+				
+				while(++i<n)
+				{
+					var cam:Camera = Camera.getCamera( names[i] as String);
+					if(cam && cam.position == buttonBar.selectedItem.label)
+					{
+						attachCamera(cam);
+						return;
+					}
+				}
+				attachCamera(Camera.getCamera());
+			}
+			
+			private function attachCamera(camera:Camera):void
+			{
+				camera.setMode(height,width, 30,true);
+				camera.setMotionLevel(0);
+				video.attachCamera(camera);
+			}
+			
+			protected function buttonHandler(event:MouseEvent):void
+			{
+				if(currentState == "DemoState")
+				{
+					currentState = "InfoState";				
+				}
+				else if(currentState == "InfoState")
+				{
+					currentState = "DemoState";
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="DemoState"/>
+		<s:State name="InfoState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:MultiDPIBitmapSource id="aboutIcon" 
+								source160dpi="@Embed('assets/icons/160/about.png')" 
+								source240dpi="@Embed('assets/icons/240/about.png')" 
+								source320dpi="@Embed('assets/icons/320/about.png')" 
+								source480dpi="assets/icons/480/about.png"/>
+		<s:MultiDPIBitmapSource id="demoIcon" 
+								source160dpi="@Embed('assets/icons/160/dock.png')" 
+								source240dpi="@Embed('assets/icons/240/dock.png')" 
+								source320dpi="@Embed('assets/icons/320/dock.png')" 
+								source480dpi="assets/icons/480/dock.png"/>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" />
+	</s:layout>
+
+	<s:Group width="100%" height="100%" id="videoDisplay" includeIn="DemoState"/>
+	
+	<s:TextArea includeIn="InfoState" selectable="false"  left="10" right="10" top="10" bottom="10" editable="false" 
+				text="Use the Camera class to capture video from the client system or device camera. Use the Video class to monitor the video locally. Use the NetConnection and NetStream classes to transmit the video to Flash Media Server. Flash Media Server can send the video stream to other servers and broadcast it to other clients running Flash Player or AIR. 
+				&#xd; &#xd;A Camera instance captures video in landscape aspect ratio. On devices that can change the screen orientation, such as mobile phones, a Video object attached to the camera will only show upright video in a landscape-aspect orientation. Thus, mobile apps should use a landscape orientation when displaying video and should not auto-rotate.
+				
+				&#xd; &#xd;On iOS, the video from the front camera is mirrored. On Android, it is not.
+				
+				&#xd; &#xd;On mobile devices with an autofocus camera, autofocus is enabled automatically. If the camera does not support continuous autofocus, and many mobile device cameras do not, then the camera is focused when the Camera object is attached to a video stream and whenever the setMode() method is called. On desktop computers, autofocus behavior is dependent on the camera driver and settings.
+				
+				&#xd; &#xd;In an AIR application on Android and iOS, the camera does not capture video while an AIR app is not the active, foreground application. In addition, streaming connections can be lost when the application is in the background. On iOS, the camera video cannot be displayed when an application uses the GPU rendering mode. The camera video can still be streamed to a server."/>
+
+	<s:actionLayout>
+		<s:HorizontalLayout gap="10" />
+	</s:actionLayout>
+	<s:actionContent>
+		<s:ButtonBar id="buttonBar" requireSelection="true"
+					 change="onButtonBar_ChangeHandler(event)">
+			<s:dataProvider>
+				<s:ArrayList>
+					<fx:Object label="{CameraPosition.FRONT}"/>
+					<fx:Object label="{CameraPosition.BACK}"/>
+				</s:ArrayList>
+			</s:dataProvider>
+		</s:ButtonBar>
+		<s:Button click="buttonHandler(event)" icon.DemoState="{aboutIcon}" icon.InfoState="{demoIcon}"/>
+	</s:actionContent>
+</s:View>

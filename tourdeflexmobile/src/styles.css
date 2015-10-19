@@ -19,30 +19,44 @@
 /* CSS file */
 @namespace s "library://ns.adobe.com/flex/spark";
 
-
-s|ActionBar
+@font-face 
 {
-	chromeColor: #303030;
+	src: url("assets/terminal-grotesque.ttf");
+	fontFamily: PixelFont;
+	fontStyle: normal;
+	fontWeight: normal;
+	embedAsCFF: true;
+	advancedAntiAliasing: true;
+	
 }
 
-s|View
-{
-	backgroundColor: #464646;
+.pixelLabel{
+	color: #000000;
+	fontSize: 14px;
+	fontWeight: normal;
+	fontFamily: PixelFont;
 }
 
-s|Application
-{
-	backgroundColor: #464646;
+
+s|Application{
+	backgroundColor: #D7DADD;	
 }
 
-s|List
-{
-	alternatingItemColors: #303030;
-	selectionColor: #000000;
-	downColor: #FA5B0F;
-	contentBackgroundColor: #464646;
+s|View{
+	backgroundColor: #D7DADD;
+}
+
+s|ActionBar{
+	chromeColor: #000000;	
+}
+
+s|ActionBar #titleDisplay{
+	textAlign: left;
+	fontWeight: normal;
 	color: #FFFFFF;
+	fontSize: 14px;
 }
+
 
 s|TextArea
 {
@@ -50,17 +64,8 @@ s|TextArea
 	contentBackgroundColor: #303030;
 }
 
-s|CheckBox
-{
-	color: #FFFFFF;	
-}
-
-s|RadioButton
-{
-	color: #FFFFFF;	
-}
 
 s|Label
 {
-	color: #FFFFFF;
+	color: #000000;
 }
